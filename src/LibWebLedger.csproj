@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>HitReFreSH.WebLedger</RootNamespace>
+		<AssemblyName>HitReFreSH.WebLedger</AssemblyName>
+		<GenerateDocumentFile>true</GenerateDocumentFile>
+
+		<Company>HitReFreSH</Company>
+		<PackageProjectUrl>https://github.com/HIT-ReFreSH/WebLedger</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/HIT-ReFreSH/WebLedger.git</RepositoryUrl>
+		<RepositoryType>Github</RepositoryType>
+		<Version>0.2.0</Version>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Nullable>enable</Nullable>
+		<LangVersion>11</LangVersion>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
+	</ItemGroup>
+
+</Project>

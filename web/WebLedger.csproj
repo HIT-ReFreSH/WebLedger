@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>a6c30a8c-6954-4d39-8755-32dfee3e5fbb</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<RootNamespace>HitReFreSH.WebLedger.Web</RootNamespace>
+		<AssemblyName>WebLedger</AssemblyName>
+		<GenerateDocumentFile>true</GenerateDocumentFile>
+
+		<Company>HitReFreSH</Company>
+		<PackageProjectUrl>https://github.com/HIT-ReFreSH/WebLedger</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/HIT-ReFreSH/WebLedger.git</RepositoryUrl>
+		<RepositoryType>Github</RepositoryType>
+		<Version>0.2.0</Version>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Nullable>enable</Nullable>
+		<LangVersion>11</LangVersion>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LibWebLedger\LibWebLedger.csproj" />
+	</ItemGroup>
+
+</Project>

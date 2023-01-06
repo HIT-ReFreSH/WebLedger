@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>HitReFreSH.WebLedger.CLI</RootNamespace>
+		<AssemblyName>WebLedgerTheSuit</AssemblyName>
+		<GenerateDocumentFile>true</GenerateDocumentFile>
+
+		<Company>HitReFreSH</Company>
+		<PackageProjectUrl>https://github.com/HIT-ReFreSH/WebLedger</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/HIT-ReFreSH/WebLedger.git</RepositoryUrl>
+		<RepositoryType>Github</RepositoryType>
+		<Version>0.2.0</Version>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Nullable>enable</Nullable>
+		<LangVersion>11</LangVersion>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+		<PackageReference Include="PlasticMetal.MobileSuit" Version="4.1.1" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LibWebLedger\LibWebLedger.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Microsoft.Extensions.Http">
+	    <HintPath>C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\7.0.0\ref\net7.0\Microsoft.Extensions.Http.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="config.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

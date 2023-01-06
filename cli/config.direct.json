@@ -1,0 +1,4 @@
+{
+  "target": "mysql",
+  "host": "server=localhost; port=3306; database=ledger; user=ledger-bot; password=3TDDJNrmb%P^nRSc; Persist Security Info=False; Connect Timeout=300"
+}
