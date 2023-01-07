@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace HitReFreSH.WebLedger.Models;
 
-public record ViewQueryResult(List<Entry> Raw, List<(string, decimal)> ByCategory, List<(string, decimal)> ByTime)
+public record ViewQueryResult(List<Entry> Raw, 
+    Dictionary<string, decimal> ByCategory,
+    Dictionary<string, decimal> ByTime)
 {
 }

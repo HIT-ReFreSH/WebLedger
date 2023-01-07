@@ -15,8 +15,9 @@ public interface ILedgerManager
     public Task RemoveViewTemplate(string template);
     public Task AddView(View view);
     public Task RemoveView(string view);
-    public Task<IList<View>> GetAllViews();
-    public Task<IList<ViewTemplate>> GetAllViewTemplates();
+    public Task<IList<string>> GetAllViewNames();
+    public Task<IList<string>> GetAllViewTemplateNames();
+    public Task<ViewTemplate> GetViewTemplate(string name);
     public Task<IList<ViewAutomation>> GetAllViewAutomation();
     public Task<ViewQueryResult> Query(ViewQueryOption view);
 }

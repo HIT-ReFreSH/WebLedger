@@ -32,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\LibWebLedger\LibWebLedger.csproj" />
+		<ProjectReference Include="..\src\LibWebLedger.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

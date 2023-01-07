@@ -15,6 +15,7 @@ var builder = Suit.CreateBuilder();
 
 builder.Configuration.AddJsonFile("config.json");
 builder.Services.AddLogging();
+builder.Services.AddScoped<WebGuiHelper>();
 if (builder.Configuration["target"] == "http")
 {
     var http = new HttpClient();

@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace HitReFreSH.WebLedger.Models;
 
-public record ViewTemplate(string Name,string Categories,bool? IsIncome)
+public record ViewTemplate(string Name,string[] Categories,bool IsIncome)
 {
 }
