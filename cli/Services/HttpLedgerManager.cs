@@ -86,7 +86,7 @@ public class HttpLedgerManager : ILedgerManager
 
     public async Task<ViewTemplate> GetViewTemplate(string name)
     {
-        return (await _http.GetFromJsonAsync<ViewTemplate>($"/ledger/view-template/{HttpUtility.UrlEncode(name)}"))
+        return (await _http.GetFromJsonAsync<ViewTemplate>($"/ledger/view-template?name={HttpUtility.UrlEncode(name)}"))
             ??throw new ViewTemplateUndefinedException(name);
     }
 

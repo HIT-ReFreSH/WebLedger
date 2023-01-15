@@ -254,7 +254,7 @@ public class Driver
                 ("\t", null, null),
                 (a.ToString("0.00"),null,null),
                 ("\t", null, null),
-                (pct.ToString("0.00"),null,null),
+                ((100 * pct).ToString("0.00"),null,null),
                 ("\t", null, null),
                 (new string(' ',l), Color.White, Color.Red), 
                 (new string(' ', full-l), Color.White, Color.Green)));
@@ -272,7 +272,7 @@ public class Driver
                 ("\t", null, null),
                 (a.ToString("0.00"), null, null),
                 ("\t", null, null),
-                (pct.ToString("0.00"), null, null),
+                ((100*pct).ToString("0.00"), null, null),
                 ("\t", null, null),
                 (new string(' ', l), Color.White, Color.Red),
                 (new string(' ', full - l), Color.White, Color.Green)));

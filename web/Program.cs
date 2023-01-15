@@ -14,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IConfigManager, DirectConfigManager>();
 builder.Services.AddScoped<ILedgerManager, DirectLedgerManager>();
 builder.Services.AddLogging();
+
 builder.Services.AddSingleton<AccessMiddleware>();
 builder.Services.AddDbContext<LedgerContext>(
     c => c.UseMySql(
@@ -36,15 +37,11 @@ else
 {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    await using var scope = app.Services.CreateAsyncScope();
+    var context = scope.ServiceProvider.GetRequiredService<LedgerContext>();
+    await context.Database.MigrateAsync();
 }
 
-Dictionary<string, string> access;
-await using (var scope = app.Services.CreateAsyncScope())
-{
-    var context= scope.ServiceProvider.GetRequiredService<LedgerContext>();
-        await context .Database.MigrateAsync();
-        access=context.Access.ToDictionary(x => x.Name, x => x.Key);
-}
 
 
 app.UseStaticFiles();

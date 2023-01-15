@@ -106,8 +106,8 @@ public class LedgerController : Controller
     {
         return Ok(await _ledgerManager.GetAllViewTemplateNames());
     }
-    [HttpGet("view-template/{template}")]
-    public async Task<ActionResult<ViewTemplate>> GetViewTemplate([FromRoute]string name)
+    [HttpGet("view-template")]
+    public async Task<ActionResult<ViewTemplate>> GetViewTemplate([FromQuery]string name)
     {
         return Ok(await _ledgerManager.GetViewTemplate(name));
     }

@@ -32,10 +32,4 @@
 		<ProjectReference Include="..\src\LibWebLedger.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="Pages\ViewQueryResultPage.Layout.html">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>

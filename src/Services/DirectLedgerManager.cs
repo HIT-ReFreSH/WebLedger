@@ -309,7 +309,7 @@ public class DirectLedgerManager : ILedgerManager
     {
         if (await _database.Views.AnyAsync(a =>
                 a.Name == view.Name)) return;
-        if (await _database.Views.AnyAsync(t => t.Name == view.TemplateName))
+        if (await _database.ViewTemplates.AnyAsync(t => t.Name == view.TemplateName))
         {
             await _database.Views.AddAsync(new()
             {
@@ -337,7 +337,9 @@ public class DirectLedgerManager : ILedgerManager
     public async Task<IList<string>> GetAllViewNames()
     {
         await CheckOutAutomation();
-        return await _database.Views.Select(v => v.Name).ToListAsync();
+        return await _database.Views
+            .OrderByDescending(v=>v.CreateTime)
+            .Select(v => v.Name).ToListAsync();
     }
 
     public async Task<IList<string>> GetAllViewTemplateNames()
@@ -370,7 +372,7 @@ public class DirectLedgerManager : ILedgerManager
         {
             groupBy = e => $"{e.GivenTime.Hour:00}:00";
         }
-        else if (maxLength <= TimeSpan.FromHours(40))
+        else if (maxLength <= TimeSpan.FromDays(40))
         {
             groupBy = e => e.GivenTime.ToString("MMdd");
         }
@@ -413,7 +415,8 @@ public class DirectLedgerManager : ILedgerManager
         var byCatSum =
                 categories.ToDictionary(c => c, c => Math.Abs(catMap[c].Sum(m => byCatOrigin.GetValueOrDefault(m))))
             ;
-        var total = categories.Sum(m => byCatOrigin.GetValueOrDefault(m));
+        var total = Math.Abs(categories.SelectMany(c => catMap[c]).Distinct()
+            .Sum(m => byCatOrigin.GetValueOrDefault(m)));
         byCatSum.Add("(Total)", total);
 
         var byTime = SumByTime(raws);
