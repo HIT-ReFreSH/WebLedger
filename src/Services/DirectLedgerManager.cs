@@ -54,11 +54,11 @@ public class DirectLedgerManager : ILedgerManager
 
     public async Task AddOrUpdateCategory(Category category)
     {
-        var dbCategory = new LedgerEntryCategory { Name = category.Name, SuperCategoryName = category.SuperCategory };
-        if (await _database.Categories.AnyAsync(c => c.Name == category.Name))
-            _database.Categories.Update(dbCategory);
+        var dbCategory = await _database.Categories.AsTracking().FirstOrDefaultAsync(c => c.Name == category.Name);
+        if (dbCategory is not null)
+            dbCategory.SuperCategoryName = category.SuperCategory;
         else
-            await _database.Categories.AddAsync(dbCategory);
+            await _database.Categories.AddAsync(new LedgerEntryCategory { Name = category.Name, SuperCategoryName = category.SuperCategory });
 
         await _database.SaveChangesAsync();
     }
@@ -284,16 +284,20 @@ public class DirectLedgerManager : ILedgerManager
     }
     public async Task AddOrUpdateViewTemplate(ViewTemplate template)
     {
-        var dbTemplate = new LedgerViewTemplate
+        var dbTemplate = await _database.ViewTemplates.AsTracking().FirstOrDefaultAsync(c => c.Name == template.Name);
+
+        if (dbTemplate is not null)
         {
-            Name = template.Name,
-            IsIncome = template.IsIncome,
-            Categories = string.Join('|', template.Categories),
-        };
-        if (await _database.Categories.AnyAsync(c => c.Name == template.Name))
-            _database.ViewTemplates.Update(dbTemplate);
+            dbTemplate.IsIncome=template.IsIncome;
+            dbTemplate.Categories = string.Join('|', template.Categories);
+        }
         else
-            await _database.ViewTemplates.AddAsync(dbTemplate);
+            await _database.ViewTemplates.AddAsync(new()
+            {
+                Name = template.Name,
+                IsIncome = template.IsIncome,
+                Categories = string.Join('|', template.Categories),
+            });
 
         await _database.SaveChangesAsync();
     }
