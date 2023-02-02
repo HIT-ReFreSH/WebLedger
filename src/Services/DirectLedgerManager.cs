@@ -410,7 +410,7 @@ public class DirectLedgerManager : ILedgerManager
         }
 
         var raws = await _database.LedgerEntries.Where(
-                e => e.CreateTime >= dbView.StartTime && e.CreateTime < dbView.EndTime)
+                e => e.GivenTime >= dbView.StartTime && e.GivenTime < dbView.EndTime)
             .Where(e => fullCat.Contains(e.CategoryName))
             .Where(e => dbView.Template.IsIncome == e.IsIncome)
             .ToArrayAsync();
