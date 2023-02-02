@@ -205,7 +205,25 @@ public class Driver
             await IO.WriteLineAsync($"{Enum.GetName( view.Type)}\t{view.TemplateName}");
         }
     }
+    [SuitAlias("r")]
+    public async Task Refund()
+    {
+        var cats = await _ledger.GetAllCategories();
+        var selected = IO.CuiSelectItemFrom("Select category", cats.Select(c => c.Name).ToArray());
+        var timeExpr = await IO.ReadLineAsync("Input Time (yyMMdd)");
 
+        var time = string.IsNullOrEmpty(timeExpr) ? DateTime.Today :
+            new DateTime(int.Parse(timeExpr[..2]) + 2000, int.Parse(timeExpr[2..4]), int.Parse(timeExpr[4..]));
+        var remote = await _ledger.Select(new(time, time.AddDays(1), null, selected));
+        if (remote.Count == 0)
+        {
+            await IO.WriteLineAsync("No Entry Found.");
+            return;
+        }
+        var toRefund = IO.CuiSelectItemFrom("Select entry to refund", remote.ToArray(),
+            e => $"{e.Type}\t{e.Amount}\t{e.Category}\t{e.GivenTime}\t{e.Description}");
+        await _ledger.Remove(toRefund.Id);
+    }
     [SuitAlias("gq")]
     public async Task QueryGraphical()
     {

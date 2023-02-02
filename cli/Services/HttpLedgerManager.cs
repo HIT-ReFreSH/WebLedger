@@ -22,6 +22,11 @@ public class HttpLedgerManager : ILedgerManager
         return await r.Content.ReadAsStringAsync();
     }
 
+    public async Task Remove(Guid id)
+    {
+        await _http.DeleteAsync($"/ledger/entry?id={id}");
+        
+    }
     public async Task AddOrUpdateCategory(Category category)
     {
         await _http.PutAsJsonAsync("/ledger/category", category);
@@ -32,10 +37,10 @@ public class HttpLedgerManager : ILedgerManager
         await _http.DeleteAsync($"/ledger/category?category={category}");
     }
 
-    public async Task<IList<Entry>> Select(SelectOption option)
+    public async Task<IList<RecordedEntry>> Select(SelectOption option)
     {
         return await (await _http.PostAsJsonAsync("/ledger/select", option))
-            .Content.ReadFromJsonAsync<List<Entry>>() ?? new List<Entry>();
+            .Content.ReadFromJsonAsync<List<RecordedEntry>>() ?? new List<RecordedEntry>();
     }
 
     public async Task<IList<Category>> GetAllCategories()

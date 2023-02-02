@@ -17,6 +17,10 @@ public class DirectLedgerManager : ILedgerManager
         _logger = logger;
     }
 
+    public async Task Remove(Guid id)
+    {
+        await _database.LedgerEntries.Where(e => e.Id == id).ExecuteDeleteAsync();
+    }
     public async Task<string> Insert(Entry entry)
     {
         var type = await _database.Types.Include(t => t.DefaultCategory)
@@ -116,7 +120,7 @@ public class DirectLedgerManager : ILedgerManager
         catMap.Add("(Total)", full);
         return catMap;
     }
-    public async Task<IList<Entry>> Select(SelectOption option)
+    public async Task<IList<RecordedEntry>> Select(SelectOption option)
     {
         IQueryable<LedgerEntry> query = _database.LedgerEntries;
 
@@ -130,8 +134,8 @@ public class DirectLedgerManager : ILedgerManager
                     _database.Categories.Where(c => categories.Contains(c.SuperCategoryName))
                         .Select(c => c.Name).ToHashSet();
 #pragma warning restore CS8604
-                if (newCategories.SetEquals(categories)) break;
-                categories = newCategories;
+                if (newCategories.Count==0) break;
+                categories.UnionWith( newCategories);
             }
 
             query = query.Where(e => categories.Contains(e.CategoryName));
@@ -140,7 +144,7 @@ public class DirectLedgerManager : ILedgerManager
         return await query
             .Where(e => option.Direction == null || e.IsIncome == option.Direction)
             .Where(e => e.GivenTime >= option.StartTime && e.GivenTime <= option.EndTime)
-            .Select(e => new Entry(e.Amount, e.GivenTime, e.TypeName, e.CategoryName, e.Description)).ToListAsync();
+            .Select(e => new RecordedEntry(e.Id,e.Amount, e.GivenTime, e.TypeName, e.CategoryName, e.Description)).ToListAsync();
     }
 
     public async Task<IList<Category>> GetAllCategories()

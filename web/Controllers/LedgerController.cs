@@ -28,7 +28,14 @@ public class LedgerController : Controller
             return BadRequest(e);
         }
     }
+    [HttpDelete("entry")]
+    public async Task<ActionResult<string>> Delete([FromQuery] Guid id)
+    {
 
+        await _ledgerManager.Remove(id);
+        return NoContent();
+
+    }
     [HttpPut("category")]
     public async Task<IActionResult> AddOrUpdateCategory([FromBody]Category category)
     {
