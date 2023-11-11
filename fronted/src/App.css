@@ -1,18 +1,30 @@
 .App {
   text-align: center;
-}
-
-.App-header {
-  background-color: #282c34;
+  background-color: var(--background-color);
+  color:var(--text-color);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+
+.App-header {
+  /* background-color: #282c34; */
+  background-color: var(--background-color-2);
+  height: 5rem;
 }
 
 .App-link {
   color: #61dafb;
+}
+.App[theme='default']{
+  --text-color:rgb(9, 16, 65);
+  --background-color:#d6d1ce;
+  --background-color-2:#5972ac;
+  --primary-color:#84b5d8;
+}
+.App[theme='dark']{
+  --text-color:#42a6fe;
+  --background-color:#0b1659;
+  --background-color-2:#233fb7;
+  --primary-color:#85e8ff;
 }
