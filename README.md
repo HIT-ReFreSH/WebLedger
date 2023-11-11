@@ -96,11 +96,34 @@ http.DefaultRequestHeaders.Add("wl-access", builder.Configuration["access"]);
 http.DefaultRequestHeaders.Add("wl-secret", builder.Configuration["secret"]);
 ```
 
+## Concepts
+
+### Category
+
+The category of a ledger entry, such as "daily necessities", "daily chemicals", "food", "beverages", can have an optional parent category.
+
+### Type
+
+A specific type of ledger entry, such as "cola," "shampoo," or "bread," represents a specific type rather than a type or category of income/consumption, and is associated with a category when it first appears (default category thereafter).
+
+### Entry
+
+A ledger entry, has its Category, Type, Amount, GivenTime, etc.
+
+### View
+
+A summarized report for certain categories in a certain time range, it can only be created from **View Template**s.
+
+### View Template
+
+Describe a class of reports (**View**) for certain categories, which store the categories information.
+
+### View Automation
+
+Automation to create **View** from **View Template** every year/day/week/month/quarter(3 months).
+
 ## Usage
 
-These functions can be accessed through CLI or other clients.
+Functions can be accessed through CLI or other clients, for development server, you can view `/swagger` to get OpenApi Support.
 
-### Create Categories
-
-//TODO
-
+**Notice: Use `ls` to view CLI commands.**

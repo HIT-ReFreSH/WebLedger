@@ -25,6 +25,7 @@ public class Driver
         _webGui = webGui;
     }
     [SuitAlias("add")]
+    [SuitInfo("Create an entry")]
     public async Task Insert()
     {
         var amount = decimal.Parse(await IO.ReadLineAsync("Input Amount") ?? "0");
@@ -42,26 +43,31 @@ public class Driver
         await IO.WriteLineAsync($"Added: {id}");
     }
     [SuitAlias("cat")]
+    [SuitInfo("Create category: cat <catname>[ <super-cat-name>]")]
     public async Task AddCategory(string catname, string? supcat = null)
     {
         await _ledger.AddOrUpdateCategory(new(catname, supcat));
     }
     [SuitAlias("del-cat")]
+    [SuitInfo("Delete category.")]
     public async Task DeleteCategory(string catname)
     {
         await _ledger.RemoveCategory(catname);
     }
     [SuitAlias("grant")]
+    [SuitInfo("Create an access: grant <access-name>; store the secret token!")]
     public async Task<string> GrantAccess(string access)
     {
         return await _config.AddAccess(access);
     }
     [SuitAlias("ungrant")]
+    [SuitInfo("Remove an access: ungrant <access-name>")]
     public async Task CancelAccess(string access)
     {
         await _config.RemoveAccess(access);
     }
     [SuitAlias("ls-acc")]
+    [SuitInfo("List all access & secrets")]
     public async Task GetAccess()
     {
         var access = await _config.GetAllAccess();
@@ -71,6 +77,7 @@ public class Driver
         }
     }
     [SuitAlias("ls-all")]
+    [SuitInfo("List all ledger entries")]
     public async Task GetAll()
     {
         var entries = await _ledger.Select(new(DateTime.MinValue, DateTime.Now, null, null));
@@ -82,6 +89,7 @@ public class Driver
     }
 
     [SuitAlias("auto")]
+    [SuitInfo("Create a view template automation")]
     public async Task EnableViewAutomation(string type)
     {
         var tmpls = await _ledger.GetAllViewTemplateNames();
@@ -97,6 +105,7 @@ public class Driver
         }, tmpl));
     }
     [SuitAlias("rm-auto")]
+    [SuitInfo("Remove a view template automation")]
     public async Task DisableViewAutomation()
     {
         var atms = await _ledger.GetAllViewAutomation();
@@ -106,6 +115,7 @@ public class Driver
             await _ledger.DisableViewAutomation(atm);
     }
     [SuitAlias("tmpl")]
+    [SuitInfo("Create a view template")]
     public async Task AddViewTemplate()
     {
         var name = await IO.ReadLineAsync("Input template name");
@@ -117,6 +127,7 @@ public class Driver
 
     }
     [SuitAlias("ed-tmpl")]
+    [SuitInfo("Edit a view template")]
     public async Task UpdateViewTemplate()
     {
         var tmpls = await _ledger.GetAllViewTemplateNames();
@@ -130,12 +141,14 @@ public class Driver
         await _ledger.AddOrUpdateViewTemplate(new(tmpl, selected, isIncome));
     }
     [SuitAlias("rm-tmpl")]
+    [SuitInfo("Remove a view template")]
     public async Task RemoveViewTemplate(string template)
     {
         if (string.IsNullOrEmpty(template)) return;
         await _ledger.RemoveViewTemplate(template);
     }
     [SuitAlias("ad-view")]
+    [SuitInfo("Add a view")]
     public async Task AddView(string name)
     {
         var tmpls = await _ledger.GetAllViewTemplateNames();
@@ -152,6 +165,7 @@ public class Driver
         await _ledger.AddView(new(tmpl,startTime,endTime,tmpl));
     }
     [SuitAlias("rm-view")]
+    [SuitInfo("Remove a view")]
     public async Task RemoveView()
     {
         var views = await _ledger.GetAllViewNames();
@@ -159,6 +173,7 @@ public class Driver
         await _ledger.RemoveView(view);
     }
     [SuitAlias("ls-cat")]
+    [SuitInfo("List all categories")]
     public async Task GetAllCategories()
     {
         var views = await _ledger.GetAllCategories();
@@ -168,6 +183,7 @@ public class Driver
         }
     }
     [SuitAlias("ls-view")]
+    [SuitInfo("List all views")]
     public async Task GetAllViewNames()
     {
         var views = await _ledger.GetAllViewNames();
@@ -178,6 +194,7 @@ public class Driver
     }
 
     [SuitAlias("ls-tmpl")]
+    [SuitInfo("List all view templates")]
     public async Task GetAllViewTemplateNames()
     {
         var views = await _ledger.GetAllViewTemplateNames();
@@ -188,6 +205,7 @@ public class Driver
     }
 
     [SuitAlias("dt-tmpl")]
+    [SuitInfo("Check view template details")]
     public async Task GetViewTemplate(string name)
     {
         var tmpl=await _ledger.GetViewTemplate(name);
@@ -196,6 +214,7 @@ public class Driver
     }
 
     [SuitAlias("ls-auto")]
+    [SuitInfo("View all automation views")]
     public async Task GetAllViewAutomation()
     {
         var views = await _ledger.GetAllViewAutomation();
@@ -206,6 +225,7 @@ public class Driver
         }
     }
     [SuitAlias("r")]
+    [SuitInfo("Refund/remove ledger entry.")]
     public async Task Refund()
     {
         var cats = await _ledger.GetAllCategories();
@@ -225,6 +245,7 @@ public class Driver
         await _ledger.Remove(toRefund.Id);
     }
     [SuitAlias("gq")]
+    [SuitInfo("Display view graphically")]
     public async Task QueryGraphical()
     {
         var views = await _ledger.GetAllViewNames();
@@ -232,6 +253,7 @@ public class Driver
         await _webGui.CachedQueryGraphical(new(view, 10));
     }
     [SuitAlias("q")]
+    [SuitInfo("Display view")]
     public async Task Query()
     {
         var views = await _ledger.GetAllViewNames();
