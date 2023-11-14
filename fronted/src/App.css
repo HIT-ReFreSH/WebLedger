@@ -13,9 +13,9 @@
   color: #61dafb;
 }
 .App[theme='default']{
-  --text-color:#1e2c73;
+  --text-color:#334393;
   --background-color:#d6d1ce;
-  --background-color-2:#5972ac;
+  --background-color-2:#6fafd4;
   --primary-color:#84b5d8;
 }
 .App[theme='dark']{
