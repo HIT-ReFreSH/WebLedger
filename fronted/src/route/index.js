@@ -10,13 +10,13 @@ export default function RootRoute() {
     return (
         <Routes>
             <Route path="/ledger">
-                <Route path="/create" element={<LedgerCreate/>} />
-                <Route path="/overview" element={<LedgerOverview/>} />
-                <Route path="/detail/:ledger" element={<LedgerDetail/>} />
+                <Route path="create" element={<LedgerCreate/>} />
+                <Route path="overview" element={<LedgerOverview/>} />
+                <Route path="detail/:ledger" element={<LedgerDetail/>} />
             </Route>
             <Route path="/report">
-                <Route path="/overview" element={<ReportOverview/>}/>
-                <Route path="/detail/:reportId" element={<ReportDetail/>}/>
+                <Route path="overview" element={<ReportOverview/>}/>
+                <Route path="detail/:reportId" element={<ReportDetail/>}/>
             </Route>
             <Route path="/setting" element={<SettingPage/>} />
             <Route path="/" element={<Navigate to="/ledgder/overview" />} />

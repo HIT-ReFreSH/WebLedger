@@ -5,12 +5,16 @@ interface HeaderItemProps {
     title?: string;
     to?: string;
     icon?: any;
+    style?: object;
 }
 function HeaderItem(props: HeaderItemProps) {
     const navigate = useNavigate();
-    const { title = 'title', to = './', icon = 'icon', ...other } = props;
+    const { title = 'title', to = './', icon = 'icon', style, ...other } = props;
     return (
-        <div {...other}>
+        <div
+            className="HeaderItem"
+            onClick={() => navigate(to)}
+            {...other}>
             {icon}
         </div>
     )
@@ -18,10 +22,10 @@ function HeaderItem(props: HeaderItemProps) {
 export default function CommonHeader() {
     return (
         <header className='CommonHeader'>
-            <HeaderItem title='账单' to='/' icon={<BarsOutlined />} />
-            <HeaderItem title='新增' to='/' icon={<EditOutlined />} />
-            <HeaderItem title='报告' to='/' icon={<LineChartOutlined />} />
-            <HeaderItem title='设置' to='/' icon={<SettingOutlined />} />
+            <HeaderItem title='账单' to='/ledger/overview' icon={<BarsOutlined />} />
+            <HeaderItem title='新增' to='/ledger/create' icon={<EditOutlined />} />
+            <HeaderItem title='报告' to='/report/overview' icon={<LineChartOutlined />} />
+            <HeaderItem title='设置' to='/setting' icon={<SettingOutlined />} />
         </header>
     );
 }

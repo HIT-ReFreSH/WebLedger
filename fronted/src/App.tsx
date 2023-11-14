@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import CommonHeader from './components/CommonHeader';
+import RootRoute from './route';
 declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {//拓展HTMLAttributes
     // extends React's HTMLAttributes
@@ -13,6 +14,7 @@ function App() {
       window.localStorage.getItem('theme') === 'dark' ? 'dark' : 'default'
     }>
       <CommonHeader/>
+      <RootRoute/>
     </div>
   );
 }
