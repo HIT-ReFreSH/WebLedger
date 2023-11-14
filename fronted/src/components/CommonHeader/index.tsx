@@ -1,23 +1,27 @@
-import { Link } from "react-router-dom";
-
-interface HeaderItemProps{
-    title?:string;
-    to?:string;
-    icon?:any;
+import { Link, useNavigate } from "react-router-dom";
+import './index.scss';
+import { BarsOutlined, BgColorsOutlined, EditOutlined, LineChartOutlined, SettingOutlined } from '@ant-design/icons';
+interface HeaderItemProps {
+    title?: string;
+    to?: string;
+    icon?: any;
 }
-function HeaderItem(props:HeaderItemProps){
-    const {title='title',to='./',icon='icon'} = props;
+function HeaderItem(props: HeaderItemProps) {
+    const navigate = useNavigate();
+    const { title = 'title', to = './', icon = 'icon', ...other } = props;
     return (
-        <div>
+        <div {...other}>
             {icon}
-            <Link to={to}>{title}</Link>
         </div>
     )
 }
-export default function CommonHeader(){
+export default function CommonHeader() {
     return (
-        <div>
-            
-        </div>
+        <header className='CommonHeader'>
+            <HeaderItem title='账单' to='/' icon={<BarsOutlined />} />
+            <HeaderItem title='新增' to='/' icon={<EditOutlined />} />
+            <HeaderItem title='报告' to='/' icon={<LineChartOutlined />} />
+            <HeaderItem title='设置' to='/' icon={<SettingOutlined />} />
+        </header>
     );
 }
