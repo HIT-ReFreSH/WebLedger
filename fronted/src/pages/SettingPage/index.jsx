@@ -1,8 +1,14 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SimpleContainer from "../../components/Container/SimpleContainer";
 import {Switch} from "antd-mobile";
+import { setTheme } from "../../actions/setting";
 export default function SettingPage() {
-    const [theme, setTheme] = useState(window.localStorage.getItem('theme') === 'dark');
+    const selector=state=>({
+        theme:state.setting?.theme
+    })
+    const {theme}=useSelector(selector)
+    const dispacth=useDispatch();
     return (
         <div>
             <h1>SettingPage</h1>
@@ -10,10 +16,11 @@ export default function SettingPage() {
             <SimpleContainer>
                 主题：
                 <Switch 
-                checked={theme}
+                checked={
+                    theme==="dark"
+                }
                 onChange={(checked) => {
-                    setTheme(checked);
-                    window.localStorage.setItem('theme', checked ? 'dark' : 'default');
+                    dispacth(setTheme(checked?"dark":"default"))
                 }}
                 ></Switch>
             </SimpleContainer>

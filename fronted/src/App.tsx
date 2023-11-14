@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import CommonHeader from './components/CommonHeader';
 import RootRoute from './route';
+import { useSelector } from 'react-redux';
 declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {//拓展HTMLAttributes
     // extends React's HTMLAttributes
@@ -9,9 +10,15 @@ declare module 'react' {
   }
 }
 function App() {
+  const selector=(state:any)=>({
+    theme:state.setting?.theme,
+  });
+  const {
+    theme,
+  }=useSelector(selector);
   return (
     <div className="App" theme={
-      window.localStorage.getItem('theme') === 'dark' ? 'dark' : 'default'
+      theme
     }>
       <CommonHeader/>
       <RootRoute/>
