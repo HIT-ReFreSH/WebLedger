@@ -4,9 +4,9 @@ export default function LedgerOverview() {
     return (
         <div className="LedgerOverview">
             <h1>LedgerOverview</h1>
-            <div className="OverviewList">
+            <div className="OverviewList" >
                 {
-                    [1,1,1,1].map((item, index) => (
+                    [1, 1, 1, 1].map((item, index) => (
                         <LedgerOverviewItem key={index} />
                     ))
                 }

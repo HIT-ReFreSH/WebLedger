@@ -1,6 +1,14 @@
-export default function LedgerOverviewItem({props}){
+import { useNavigate } from 'react-router-dom';
+export default function LedgerOverviewItem({ props }) {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        // 进行编程式路由导航
+        navigate('/legder/detail/1');
+    };
+
     return (
-        <div className="OverviewItem">
+        <div className="OverviewItem" onClick={handleClick}>
             <div className="num">50</div>
             <div className="infoContainer">
                 <div className="title">宿舍电费</div>
