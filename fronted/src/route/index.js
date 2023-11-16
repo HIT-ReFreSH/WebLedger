@@ -19,7 +19,7 @@ export default function RootRoute() {
                 <Route path="detail/:reportId" element={<ReportDetail />} />
             </Route>
             <Route path="/setting" element={<SettingPage />} />
-            <Route path="/" element={<Navigate to="/ledgder/overview" />} />
+            <Route path="/" element={<Navigate to="/ledger/overview" />} />
             <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
     );
