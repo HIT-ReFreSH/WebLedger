@@ -1,0 +1,22 @@
+.CommonHeader {
+  background-color: var(--background-color-2);
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .HeaderItem{
+    height: 4rem;
+    width: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &>span{
+      height: 70%;
+      width: 70%;
+      &>svg{
+        height: 100% !important;
+        width: 100% !important;
+      }
+    }
+  }
+}
