@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
       },
-      "launchUrl": "swagger",
+      "launchUrl": "",
       "dotnetRunMessages": true,
       "applicationUrl": "http://0.0.0.0:5143"
     }
