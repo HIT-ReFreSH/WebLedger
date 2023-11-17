@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLedger", "web\WebLedger.csproj", "{CACDC2F4-29B2-43EC-A3C1-D861E045D812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLedger", "server\WebLedger.csproj", "{CACDC2F4-29B2-43EC-A3C1-D861E045D812}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLedgerTheSuit", "cli\WebLedgerTheSuit.csproj", "{18BA26BD-77EA-434B-A871-0C9B050C8B08}"
 EndProject
