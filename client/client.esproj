@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.126-alpha">
+	<PropertyGroup>
+		<StartupCommand>yarn run start</StartupCommand>
+		<BuildCommand>yarn run build</BuildCommand>
+		<TestCommand>yarn run build</TestCommand>
+		<CleanCommand>yarn run clean</CleanCommand>
+		<PublishCommand>yarn run build</PublishCommand>
+		<JavaScriptTestRoot>src\</JavaScriptTestRoot>
+		<JavaScriptTestFramework>Jest</JavaScriptTestFramework>
+		<!-- Allows the build (or compile) script located on package.json to run on Build -->
+		<ShouldRunBuildScript>false</ShouldRunBuildScript>
+		<ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+		<!-- Folder where production build objects will be placed -->
+		<PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
+	</PropertyGroup>
+</Project>

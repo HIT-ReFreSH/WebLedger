@@ -1,5 +1,5 @@
 {
-  "name": "fronted",
+  "name": "webledger",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -150,5 +150,6 @@
     "presets": [
       "react-app"
     ]
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }
