@@ -10,17 +10,17 @@
 
 
 .App-link {
-  color: #61dafb;
+  color: #4ad4fb;
 }
 .App[theme='default']{
-  --text-color:#334393;
-  --background-color:#d6d1ce;
-  --background-color-2:#6fafd4;
-  --primary-color:#84b5d8;
+  --text-color:#2b3d97;
+  --background-color:#bab5b2;
+  --background-color-2:#5ca6d0;
+  --primary-color:#6b95b4;
 }
 .App[theme='dark']{
-  --text-color:#42a6fe;
-  --background-color:#0b1659;
-  --background-color-2:#233fb7;
-  --primary-color:#85e8ff;
+  --text-color:#2e95ee;
+  --background-color:#101f7e;
+  --background-color-2:#1d359f;
+  --primary-color:#73e0f8;
 }
