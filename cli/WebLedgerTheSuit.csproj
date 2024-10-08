@@ -20,7 +20,7 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <ContainerRepository>hitrefresh/web-legder-cli</ContainerRepository>
+        <ContainerRepository>hitrefresh/web-ledger-cli</ContainerRepository>
         <ContainerImageTag>$(Version)</ContainerImageTag>
     </PropertyGroup>
 

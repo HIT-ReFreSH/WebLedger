@@ -21,7 +21,7 @@
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<ContainerRepository>hitrefresh/web-legder</ContainerRepository>
+		<ContainerRepository>hitrefresh/web-ledger</ContainerRepository>
 		<ContainerImageTag>$(Version)</ContainerImageTag>
 	</PropertyGroup>
 	<PropertyGroup>

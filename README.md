@@ -43,7 +43,8 @@ docker run hitrefresh/web-legder:0.3.1 \
 ### Build Image
 
 ```bash
-docker build -t hitrefresh/weblegder:0.3.1 . -f .\web\Dockerfile
+cd web
+dotnet publish --os linux /t:PublishContainer
 cd cli
 dotnet publish --os linux /t:PublishContainer
 ```
