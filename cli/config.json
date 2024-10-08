@@ -1,7 +1,7 @@
 {
-  "target": "$WL_METHOD",
-  "host": "$WL_HOST",
+  "target": "${WL_METHOD}",
+  "host": "${WL_HOST}",
   "host-mysql": "database=${WL_SQL_DB?ledger}; server=${WL_SQL_HOST?localhost}; port=${WL_SQL_PORT?3306}; user=${WL_SQL_USER?ledger-bot}; password=${WL_SQL_PWD?password}; Persist Security Info=False; Connect Timeout=300",
-  "access": "$WL_ACCESS",
-  "secret": "$WL_SECRET"
+  "access": "${WL_ACCESS}",
+  "secret": "${WL_SECRET}"
 }
