@@ -6,26 +6,20 @@ using System.Globalization;
 
 namespace HitRefresh.WebLedger.Services;
 
-public class DirectLedgerManager : ILedgerManager
+public class DirectLedgerManager(LedgerContext database, ILogger<DirectLedgerManager> logger)
+    : ILedgerManager
 {
-    private readonly LedgerContext _database;
-    private readonly ILogger<DirectLedgerManager> _logger;
-
-    public DirectLedgerManager(LedgerContext database, ILogger<DirectLedgerManager> logger)
-    {
-        _database = database;
-        _logger = logger;
-    }
+    private readonly ILogger<DirectLedgerManager> _logger = logger;
 
     public async Task Remove(Guid id)
     {
-        await _database.LedgerEntries.Where(e => e.Id == id).ExecuteDeleteAsync();
+        await database.LedgerEntries.Where(e => e.Id == id).ExecuteDeleteAsync();
     }
     public async Task<string> Insert(Entry entry)
     {
-        var type = await _database.Types.Include(t => t.DefaultCategory)
+        var type = await database.Types.Include(t => t.DefaultCategory)
             .FirstOrDefaultAsync(t => t.Name == entry.Type);
-        var category = await _database.Categories.FirstOrDefaultAsync(c => c.Name == entry.Category);
+        var category = await database.Categories.FirstOrDefaultAsync(c => c.Name == entry.Category);
         if (type is null)
         {
             if (category is null)
@@ -36,8 +30,8 @@ public class DirectLedgerManager : ILedgerManager
                 DefaultCategory = category,
                 DefaultIsIncome = entry.Amount > 0
             };
-            await _database.Types.AddAsync(type);
-            await _database.SaveChangesAsync();
+            await database.Types.AddAsync(type);
+            await database.SaveChangesAsync();
         }
 
         category ??= type.DefaultCategory;
@@ -51,28 +45,28 @@ public class DirectLedgerManager : ILedgerManager
             Category = category,
             Type = type
         };
-        await _database.LedgerEntries.AddAsync(dbEntry);
-        await _database.SaveChangesAsync();
+        await database.LedgerEntries.AddAsync(dbEntry);
+        await database.SaveChangesAsync();
         return dbEntry.Id.ToString();
     }
 
     public async Task AddOrUpdateCategory(Category category)
     {
-        var dbCategory = await _database.Categories.AsTracking().FirstOrDefaultAsync(c => c.Name == category.Name);
+        var dbCategory = await database.Categories.AsTracking().FirstOrDefaultAsync(c => c.Name == category.Name);
         if (dbCategory is not null)
             dbCategory.SuperCategoryName = category.SuperCategory;
         else
-            await _database.Categories.AddAsync(new LedgerEntryCategory { Name = category.Name, SuperCategoryName = category.SuperCategory });
+            await database.Categories.AddAsync(new LedgerEntryCategory { Name = category.Name, SuperCategoryName = category.SuperCategory });
 
-        await _database.SaveChangesAsync();
+        await database.SaveChangesAsync();
     }
 
     public async Task RemoveCategory(string category)
     {
         var dbCategory = new LedgerEntryCategory { Name = category };
-        _database.Categories.Remove(dbCategory);
+        database.Categories.Remove(dbCategory);
 
-        await _database.SaveChangesAsync();
+        await database.SaveChangesAsync();
     }
 
     private Dictionary<string, HashSet<string>> GetFullCategories()
@@ -106,7 +100,7 @@ public class DirectLedgerManager : ILedgerManager
                 }
 
             }
-            var currentSubCats = _database.Categories
+            var currentSubCats = database.Categories
                 .Where(c => c.SuperCategoryName == currentNode)
                 .Select(c => c.Name)
                 .Cast<string?>()
@@ -122,7 +116,7 @@ public class DirectLedgerManager : ILedgerManager
     }
     public async Task<IList<RecordedEntry>> Select(SelectOption option)
     {
-        IQueryable<LedgerEntry> query = _database.LedgerEntries;
+        IQueryable<LedgerEntry> query = database.LedgerEntries;
 
         if (option.Category != null)
         {
@@ -131,7 +125,7 @@ public class DirectLedgerManager : ILedgerManager
             {
 #pragma warning disable CS8604
                 var newCategories =
-                    _database.Categories.Where(c => categories.Contains(c.SuperCategoryName))
+                    database.Categories.Where(c => categories.Contains(c.SuperCategoryName))
                         .Select(c => c.Name).ToHashSet();
 #pragma warning restore CS8604
                 if (newCategories.Count==0) break;
@@ -149,22 +143,22 @@ public class DirectLedgerManager : ILedgerManager
 
     public async Task<IList<Category>> GetAllCategories()
     {
-        return await _database.Categories.Select(c => new Category(c.Name, c.SuperCategoryName)).ToArrayAsync();
+        return await database.Categories.Select(c => new Category(c.Name, c.SuperCategoryName)).ToArrayAsync();
     }
 
     public async Task EnableViewAutomation(ViewAutomation automation)
     {
 
-        if (await _database.ViewAutomation.AnyAsync(a =>
+        if (await database.ViewAutomation.AnyAsync(a =>
             a.TemplateName == automation.TemplateName && a.Type == automation.Type)) return;
-        if (await _database.ViewTemplates.AnyAsync(t => t.Name == automation.TemplateName))
+        if (await database.ViewTemplates.AnyAsync(t => t.Name == automation.TemplateName))
         {
-            await _database.ViewAutomation.AddAsync(new()
+            await database.ViewAutomation.AddAsync(new()
             {
                 TemplateName = automation.TemplateName,
                 Type = automation.Type
             });
-            await _database.SaveChangesAsync();
+            await database.SaveChangesAsync();
         }
         else
         {
@@ -174,15 +168,15 @@ public class DirectLedgerManager : ILedgerManager
 
     public async Task DisableViewAutomation(ViewAutomation automation)
     {
-        if (await _database.ViewAutomation.AnyAsync(a =>
+        if (await database.ViewAutomation.AnyAsync(a =>
                 a.TemplateName == automation.TemplateName && a.Type == automation.Type))
         {
-            _database.ViewAutomation.Remove(new()
+            database.ViewAutomation.Remove(new()
             {
                 TemplateName = automation.TemplateName,
                 Type = automation.Type
             });
-            await _database.SaveChangesAsync();
+            await database.SaveChangesAsync();
         }
     }
 
@@ -249,7 +243,7 @@ public class DirectLedgerManager : ILedgerManager
         };
     }
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="automation">Whether a new view is generated.</param>
     /// <returns></returns>
@@ -266,15 +260,15 @@ public class DirectLedgerManager : ILedgerManager
             EndTime = AutomationGeneratedViewEndTime(automation),
             TemplateName = automation.TemplateName
         };
-        _database.Views.Add(view);
+        database.Views.Add(view);
 
         return (true);
     }
 
     private async Task CheckOutAutomation()
     {
-        var views = _database.Views.Select(view => view.Name).ToHashSet();
-        var automation = _database.ViewAutomation.AsEnumerable()
+        var views = database.Views.Select(view => view.Name).ToHashSet();
+        var automation = database.ViewAutomation.AsEnumerable()
             .GroupBy(a => a.Type)
             .OrderBy(g => g.Key);
         foreach (var g in automation)
@@ -284,11 +278,11 @@ public class DirectLedgerManager : ILedgerManager
             // the smaller ones are all Unexecuted, except Weekly ones.
             if (!goNext && g.Key == LedgerViewAutomationType.Weekly) break;
         }
-        await _database.SaveChangesAsync();
+        await database.SaveChangesAsync();
     }
     public async Task AddOrUpdateViewTemplate(ViewTemplate template)
     {
-        var dbTemplate = await _database.ViewTemplates.AsTracking().FirstOrDefaultAsync(c => c.Name == template.Name);
+        var dbTemplate = await database.ViewTemplates.AsTracking().FirstOrDefaultAsync(c => c.Name == template.Name);
 
         if (dbTemplate is not null)
         {
@@ -296,30 +290,30 @@ public class DirectLedgerManager : ILedgerManager
             dbTemplate.Categories = string.Join('|', template.Categories);
         }
         else
-            await _database.ViewTemplates.AddAsync(new()
+            await database.ViewTemplates.AddAsync(new()
             {
                 Name = template.Name,
                 IsIncome = template.IsIncome,
                 Categories = string.Join('|', template.Categories),
             });
 
-        await _database.SaveChangesAsync();
+        await database.SaveChangesAsync();
     }
 
     public async Task RemoveViewTemplate(string template)
     {
-        _database.ViewTemplates.Remove(new() { Name = template });
+        database.ViewTemplates.Remove(new() { Name = template });
 
-        await _database.SaveChangesAsync();
+        await database.SaveChangesAsync();
     }
 
     public async Task AddView(View view)
     {
-        if (await _database.Views.AnyAsync(a =>
+        if (await database.Views.AnyAsync(a =>
                 a.Name == view.Name)) return;
-        if (await _database.ViewTemplates.AnyAsync(t => t.Name == view.TemplateName))
+        if (await database.ViewTemplates.AnyAsync(t => t.Name == view.TemplateName))
         {
-            await _database.Views.AddAsync(new()
+            await database.Views.AddAsync(new()
             {
                 TemplateName = view.TemplateName,
                 CreateTime = DateTime.Now,
@@ -327,7 +321,7 @@ public class DirectLedgerManager : ILedgerManager
                 StartTime = view.StartTime,
                 Name = view.Name,
             });
-            await _database.SaveChangesAsync();
+            await database.SaveChangesAsync();
         }
         else
         {
@@ -337,28 +331,28 @@ public class DirectLedgerManager : ILedgerManager
 
     public async Task RemoveView(string view)
     {
-        _database.Views.Remove(new() { Name = view });
+        database.Views.Remove(new() { Name = view });
 
-        await _database.SaveChangesAsync();
+        await database.SaveChangesAsync();
     }
 
     public async Task<IList<string>> GetAllViewNames()
     {
         await CheckOutAutomation();
-        return await _database.Views
+        return await database.Views
             .OrderByDescending(v=>v.CreateTime)
             .Select(v => v.Name).ToListAsync();
     }
 
     public async Task<IList<string>> GetAllViewTemplateNames()
     {
-        return await _database.ViewTemplates.Select(v => v.Name)
+        return await database.ViewTemplates.Select(v => v.Name)
             .ToListAsync();
     }
 
     public async Task<ViewTemplate> GetViewTemplate(string name)
     {
-        var dbTemplate = await _database.ViewTemplates.FirstOrDefaultAsync(v => v.Name == name);
+        var dbTemplate = await database.ViewTemplates.FirstOrDefaultAsync(v => v.Name == name);
         if (dbTemplate == null) throw new ViewTemplateUndefinedException(name);
         return new(dbTemplate.Name, dbTemplate.Categories.Split('|'), dbTemplate.IsIncome);
     }
@@ -366,7 +360,7 @@ public class DirectLedgerManager : ILedgerManager
 
     public async Task<IList<ViewAutomation>> GetAllViewAutomation()
     {
-        return await _database.ViewAutomation
+        return await database.ViewAutomation
             .Select(v => new ViewAutomation(v.Type, v.TemplateName))
             .ToListAsync();
     }
@@ -398,7 +392,7 @@ public class DirectLedgerManager : ILedgerManager
     }
     public async Task<ViewQueryResult> Query(ViewQueryOption view)
     {
-        var dbView = await _database.Views.Include(v => v.Template)
+        var dbView = await database.Views.Include(v => v.Template)
             .FirstOrDefaultAsync(v => v.Name == view.ViewName);
         if (dbView == null) throw new ViewUndefinedException(view.ViewName);
         var catMap = GetFullCategories();
@@ -409,7 +403,7 @@ public class DirectLedgerManager : ILedgerManager
             fullCat.UnionWith(cat);
         }
 
-        var raws = await _database.LedgerEntries.Where(
+        var raws = await database.LedgerEntries.Where(
                 e => e.GivenTime >= dbView.StartTime && e.GivenTime < dbView.EndTime)
             .Where(e => fullCat.Contains(e.CategoryName))
             .Where(e => dbView.Template.IsIncome == e.IsIncome)

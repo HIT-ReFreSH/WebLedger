@@ -12,23 +12,14 @@ using static System.Net.WebRequestMethods;
 
 namespace HitRefresh.WebLedger.CLI.Services;
 
-public class WebGuiHelper
+public class WebGuiHelper(IIOHub io, IServiceProvider sp)
 {
-    private readonly IIOHub _io;
-    private readonly IServiceProvider _sp;
-
-    public WebGuiHelper(IIOHub io, IServiceProvider sp)
-    {
-        _io = io;
-        _sp = sp;
-    }
-
     public async Task CachedQueryGraphical(ViewQueryOption view)
     {
-        var http = _sp.GetService<HttpClient>();
+        var http = sp.GetService<HttpClient>();
         if (http is null)
         {
-            await _io.WriteLineAsync($"No Http Client Available.", OutputType.Error);
+            await io.WriteLineAsync($"No Http Client Available.", OutputType.Error);
             return;
         }
         var resp = await http.PostAsJsonAsync("/ledger/query-graphical", view);

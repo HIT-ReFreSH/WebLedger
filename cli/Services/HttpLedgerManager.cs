@@ -6,103 +6,96 @@ using HitRefresh.WebLedger.Services;
 
 namespace HitRefresh.WebLedger.CLI.Services;
 
-public class HttpLedgerManager : ILedgerManager
+public class HttpLedgerManager(HttpClient http) : ILedgerManager
 {
-    private readonly HttpClient _http;
-
-    public HttpLedgerManager(HttpClient http)
-    {
-        _http = http;
-    }
-
     public async Task<string> Insert(Entry entry)
     {
-        var r = await _http.PostAsync("/ledger/entry", JsonContent.Create(entry));
+        var r = await http.PostAsync("/ledger/entry", JsonContent.Create(entry));
         if (r.StatusCode == HttpStatusCode.BadRequest) throw new TypeUndefinedException(entry.Type);
         return await r.Content.ReadAsStringAsync();
     }
 
     public async Task Remove(Guid id)
     {
-        await _http.DeleteAsync($"/ledger/entry?id={id}");
+        await http.DeleteAsync($"/ledger/entry?id={id}");
         
     }
     public async Task AddOrUpdateCategory(Category category)
     {
-        await _http.PutAsJsonAsync("/ledger/category", category);
+        await http.PutAsJsonAsync("/ledger/category", category);
     }
 
     public async Task RemoveCategory(string category)
     {
-        await _http.DeleteAsync($"/ledger/category?category={category}");
+        await http.DeleteAsync($"/ledger/category?category={category}");
     }
 
     public async Task<IList<RecordedEntry>> Select(SelectOption option)
     {
-        return await (await _http.PostAsJsonAsync("/ledger/select", option))
+        return await (await http.PostAsJsonAsync("/ledger/select", option))
             .Content.ReadFromJsonAsync<List<RecordedEntry>>() ?? new List<RecordedEntry>();
     }
 
     public async Task<IList<Category>> GetAllCategories()
     {
-        return await _http.GetFromJsonAsync<List<Category>>("/ledger/category") ?? new List<Category>();
+        return await http.GetFromJsonAsync<List<Category>>("/ledger/category") ?? new List<Category>();
     }
 
     public async Task EnableViewAutomation(ViewAutomation automation)
     {
-        await _http.PostAsJsonAsync("/ledger/view-automation/add", automation);
+        await http.PostAsJsonAsync("/ledger/view-automation/add", automation);
     }
 
     public async Task DisableViewAutomation(ViewAutomation automation)
     {
-        await _http.PostAsJsonAsync("/ledger/view-automation/remove", automation);
+        await http.PostAsJsonAsync("/ledger/view-automation/remove", automation);
     }
 
     public async Task AddOrUpdateViewTemplate(ViewTemplate template)
     {
-        await _http.PutAsJsonAsync("/ledger/view-template", template);
+        await http.PutAsJsonAsync("/ledger/view-template", template);
     }
 
     public async Task RemoveViewTemplate(string template)
     {
-        await _http.DeleteAsync($"/ledger/view-template?template={HttpUtility.UrlEncode(template)}");
+        await http.DeleteAsync($"/ledger/view-template?template={HttpUtility.UrlEncode(template)}");
 
     }
 
     public async Task AddView(View view)
     {
-        await _http.PostAsJsonAsync("/ledger/view", view);
+        await http.PostAsJsonAsync("/ledger/view", view);
     }
 
     public async Task RemoveView(string view)
     {
-        await _http.DeleteAsync($"/ledger/view?view={HttpUtility.UrlEncode(view)}");
+        await http.DeleteAsync($"/ledger/view?view={HttpUtility.UrlEncode(view)}");
     }
 
     public async Task<IList<string>> GetAllViewNames()
     {
-        return (await _http.GetFromJsonAsync<List<string>>("/ledger/view"))??new();
+        return (await http.GetFromJsonAsync<List<string>>("/ledger/view"))??new();
     }
 
     public async Task<IList<string>> GetAllViewTemplateNames()
     {
-        return (await _http.GetFromJsonAsync<List<string>>("/ledger/view-templates")) ?? new();
+        return (await http.GetFromJsonAsync<List<string>>("/ledger/view-templates")) ?? new();
     }
 
     public async Task<ViewTemplate> GetViewTemplate(string name)
     {
-        return (await _http.GetFromJsonAsync<ViewTemplate>($"/ledger/view-template?name={HttpUtility.UrlEncode(name)}"))
+        return (await http.GetFromJsonAsync<ViewTemplate>($"/ledger/view-template?name={HttpUtility.UrlEncode(name)}"))
             ??throw new ViewTemplateUndefinedException(name);
     }
 
     public async Task<IList<ViewAutomation>> GetAllViewAutomation()
     {
-        return(await _http.GetFromJsonAsync<List<ViewAutomation>>("/ledger/view-automation")) ?? new();
+        return(await http.GetFromJsonAsync<List<ViewAutomation>>("/ledger/view-automation")) ?? new();
     }
 
     public async Task<ViewQueryResult> Query(ViewQueryOption view)
     {
-        var resp = await _http.PostAsJsonAsync("/ledger/query", view);
+        var resp = await http.PostAsJsonAsync("/ledger/query", view);
         return await resp.Content.ReadFromJsonAsync<ViewQueryResult>()??throw new Exception(await resp.Content.ReadAsStringAsync());
     }
 }

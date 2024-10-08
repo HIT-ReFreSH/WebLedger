@@ -2,20 +2,15 @@
 
 namespace HitRefresh.WebLedger.Web.Services;
 
-public class AccessMiddleware : IMiddleware
+public class AccessMiddleware(IServiceProvider serviceProvider) : IMiddleware
 {
     private Dictionary<string, string> _access=new();
-    private readonly IServiceProvider _serviceProvider;
 
-    public AccessMiddleware( IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         if (!_access.Any())
         {
-            await using var scope = _serviceProvider.CreateAsyncScope();
+            await using var scope = serviceProvider.CreateAsyncScope();
             _access = scope.ServiceProvider.GetRequiredService<LedgerContext>()
                 .Access.ToDictionary(x => x.Name, x => x.Key);
             if (!_access.Any() || (
@@ -37,7 +32,7 @@ public class AccessMiddleware : IMiddleware
                 await next(context);
             else
             {
-                await using var scope = _serviceProvider.CreateAsyncScope();
+                await using var scope = serviceProvider.CreateAsyncScope();
                 _access = scope.ServiceProvider.GetRequiredService<LedgerContext>()
                     .Access.ToDictionary(x => x.Name, x => x.Key);
                 if (!_access.Any() || (

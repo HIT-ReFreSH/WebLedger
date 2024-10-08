@@ -48,9 +48,7 @@ else
 
 
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 app.UseMiddleware<AccessMiddleware>();
 app.MapRazorPages();

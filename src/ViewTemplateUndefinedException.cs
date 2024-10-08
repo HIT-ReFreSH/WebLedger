@@ -28,10 +28,4 @@ public class ViewTemplateUndefinedException : Exception
     public ViewTemplateUndefinedException(string message, Exception inner) : base(message, inner)
     {
     }
-
-    protected ViewTemplateUndefinedException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
 }

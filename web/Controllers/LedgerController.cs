@@ -6,21 +6,14 @@ using System.Reflection;
 namespace HitRefresh.WebLedger.Web.Controllers;
 
 [Route("[controller]")]
-public class LedgerController : Controller
+public class LedgerController(ILedgerManager ledgerManager) : Controller
 {
-    private readonly ILedgerManager _ledgerManager;
-
-    public LedgerController(ILedgerManager ledgerManager)
-    {
-        _ledgerManager = ledgerManager;
-    }
-
     [HttpPost("entry")]
     public async Task<ActionResult<string>> Insert([FromBody] Entry entry)
     {
         try
         {
-            var eid = await _ledgerManager.Insert(entry);
+            var eid = await ledgerManager.Insert(entry);
             return eid;
         }
         catch (TypeUndefinedException e)
@@ -32,102 +25,102 @@ public class LedgerController : Controller
     public async Task<ActionResult<string>> Delete([FromQuery] Guid id)
     {
 
-        await _ledgerManager.Remove(id);
+        await ledgerManager.Remove(id);
         return NoContent();
 
     }
     [HttpPut("category")]
     public async Task<IActionResult> AddOrUpdateCategory([FromBody]Category category)
     {
-        await _ledgerManager.AddOrUpdateCategory(category);
+        await ledgerManager.AddOrUpdateCategory(category);
         return NoContent();
     }
 
     [HttpDelete("category")]
     public async Task<IActionResult> RemoveCategory([FromQuery]string category)
     {
-        await _ledgerManager.RemoveCategory(category);
+        await ledgerManager.RemoveCategory(category);
         return NoContent();
     }
 
     [HttpPost("select")]
     public async Task<IActionResult> Select([FromBody] SelectOption option)
     {
-        return Ok(await _ledgerManager.Select(option));
+        return Ok(await ledgerManager.Select(option));
     }
 
     [HttpGet("category")]
     public async Task<IActionResult> GetAllCategories()
     {
-        return Ok(await _ledgerManager.GetAllCategories());
+        return Ok(await ledgerManager.GetAllCategories());
     }
 
     [HttpPost("view-automation/add")]
     public async Task<IActionResult> EnableViewAutomation([FromBody] ViewAutomation automation)
     {
-        await _ledgerManager.EnableViewAutomation(automation);
+        await ledgerManager.EnableViewAutomation(automation);
         return NoContent();
     }
     [HttpPost("view-automation/remove")]
     public async Task<IActionResult> DisableViewAutomation([FromBody] ViewAutomation automation)
     {
-        await _ledgerManager.DisableViewAutomation(automation);
+        await ledgerManager.DisableViewAutomation(automation);
         return NoContent();
     }
     [HttpPut("view-template")]
     public async Task<IActionResult> AddOrUpdateViewTemplate([FromBody] ViewTemplate template)
     {
-        await _ledgerManager.AddOrUpdateViewTemplate(template);
+        await ledgerManager.AddOrUpdateViewTemplate(template);
         return NoContent();
     }
 
     [HttpDelete("view-template")]
     public async Task<IActionResult> RemoveViewTemplate([FromQuery] string template)
     {
-        await _ledgerManager.RemoveViewTemplate(template);
+        await ledgerManager.RemoveViewTemplate(template);
         return NoContent();
     }
 
     [HttpPost("view")]
     public async Task<IActionResult> AddView([FromBody] View view)
     {
-        await _ledgerManager.AddView(view);
+        await ledgerManager.AddView(view);
         return NoContent();
     }
 
     [HttpDelete("view")]
     public async Task<IActionResult> RemoveView([FromQuery] string view)
     {
-        await _ledgerManager.RemoveView(view);
+        await ledgerManager.RemoveView(view);
         return NoContent();
     }
 
     [HttpGet("view")]
     public async Task<ActionResult<IList<string>>> GetAllViewNames()
     {
-        return Ok(await _ledgerManager.GetAllViewNames());
+        return Ok(await ledgerManager.GetAllViewNames());
     }
 
     [HttpGet("view-templates")]
     public async Task<ActionResult<IList<string>>> GetAllViewTemplateNames()
     {
-        return Ok(await _ledgerManager.GetAllViewTemplateNames());
+        return Ok(await ledgerManager.GetAllViewTemplateNames());
     }
     [HttpGet("view-template")]
     public async Task<ActionResult<ViewTemplate>> GetViewTemplate([FromQuery]string name)
     {
-        return Ok(await _ledgerManager.GetViewTemplate(name));
+        return Ok(await ledgerManager.GetViewTemplate(name));
     }
 
     [HttpGet("view-automation")]
     public async Task<ActionResult<IList<ViewAutomation>>> GetAllViewAutomation()
     {
-        return Ok(await _ledgerManager.GetAllViewAutomation());
+        return Ok(await ledgerManager.GetAllViewAutomation());
     }
     [HttpPost("query")]
     public async Task<ActionResult<ViewQueryResult>> Query([FromBody]ViewQueryOption view)
     {
-        return Ok(await _ledgerManager.Query(view));
+        return Ok(await ledgerManager.Query(view));
     }
 
     [HttpPost("query-graphical")]

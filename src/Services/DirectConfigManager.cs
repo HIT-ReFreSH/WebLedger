@@ -5,29 +5,22 @@ using Microsoft.Extensions.Logging;
 
 namespace HitRefresh.WebLedger.Services;
 
-public class DirectConfigManager : IConfigManager
+public class DirectConfigManager(LedgerContext database, ILogger<DirectLedgerManager> logger)
+    : IConfigManager
 {
-    private const int SecretLength = 32;
-    private readonly LedgerContext _database;
-    private readonly ILogger<DirectLedgerManager> _logger;
-
-    public DirectConfigManager(LedgerContext database, ILogger<DirectLedgerManager> logger)
-    {
-        _database = database;
-        _logger = logger;
-    }
+    private const int kSecretLength = 32;
 
     public async Task<string> AddAccess(string name)
     {
         try
         {
             var secret = RandomSecret();
-            _database.Access.Add(new LedgerAccess
+            database.Access.Add(new LedgerAccess
             {
                 Name = name,
                 Key = secret
             });
-            await _database.SaveChangesAsync();
+            await database.SaveChangesAsync();
             return secret;
         }
         catch (Exception e)
@@ -40,16 +33,16 @@ public class DirectConfigManager : IConfigManager
 
     public async Task RemoveAccess(string name)
     {
-        _database.Access.Remove(new LedgerAccess
+        database.Access.Remove(new LedgerAccess
         {
             Name = name
         });
-        await _database.SaveChangesAsync();
+        await database.SaveChangesAsync();
     }
 
     public async Task<LedgerAccess[]> GetAllAccess()
     {
-        return await _database.Access.ToArrayAsync();
+        return await database.Access.ToArrayAsync();
     }
 
     private static string RandomSecret()
@@ -59,7 +52,7 @@ public class DirectConfigManager : IConfigManager
         var randomIntSpace = offset + specialChars.Length;
         var random = new Random();
         var sb = new StringBuilder();
-        for (var i = 0; i < SecretLength; i++)
+        for (var i = 0; i < kSecretLength; i++)
         {
             var rnd = random.Next(randomIntSpace);
             var c = rnd switch

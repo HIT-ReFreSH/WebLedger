@@ -24,9 +24,4 @@ public class TypeUndefinedException : Exception
     {
     }
 
-    protected TypeUndefinedException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
 }

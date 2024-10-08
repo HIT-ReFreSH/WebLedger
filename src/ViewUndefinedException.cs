@@ -29,9 +29,4 @@ public class ViewUndefinedException : Exception
     {
     }
 
-    protected ViewUndefinedException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
 }
