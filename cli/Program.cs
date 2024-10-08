@@ -34,7 +34,7 @@ if (builder.Configuration["target"] == "http")
 }
 else
 {
-    var mysql = builder.Configuration["host"];
+    var mysql = builder.Configuration["host-sql"];
     builder.Services.AddScoped<IConfigManager, DirectConfigManager>();
     builder.Services.AddScoped<ILedgerManager, DirectLedgerManager>();
 
