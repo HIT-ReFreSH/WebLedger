@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>a6c30a8c-6954-4d39-8755-32dfee3e5fbb</UserSecretsId>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+
 		<RootNamespace>HitRefresh.WebLedger.Web</RootNamespace>
 		<AssemblyName>WebLedger</AssemblyName>
 		<GenerateDocumentFile>true</GenerateDocumentFile>
@@ -14,13 +14,20 @@
 		<PackageProjectUrl>https://github.com/HIT-ReFreSH/WebLedger</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/HIT-ReFreSH/WebLedger.git</RepositoryUrl>
 		<RepositoryType>Github</RepositoryType>
-		<Version>0.2.0</Version>
+		<Version>0.3.0</Version>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Nullable>enable</Nullable>
 		<LangVersion>12</LangVersion>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-	</PropertyGroup>
 
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<ContainerRepository>hitrefresh/web-legder</ContainerRepository>
+		<ContainerImageTag>$(Version)</ContainerImageTag>
+	</PropertyGroup>
+	<PropertyGroup>
+		<IsPublishable>true</IsPublishable>
+		<EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />

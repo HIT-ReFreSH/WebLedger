@@ -4,17 +4,48 @@
 
 # WebLedger
 
+![DockerHub-v](https://img.shields.io/docker/v/hitrefresh/web-legder?style=flat-square)
+![DockerHub-DL](https://img.shields.io/docker/pulls/hitrefresh/web-legder?style=flat-square)
+![DockerHub-size](https://img.shields.io/docker/image-size/hitrefresh/web-legder?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/HIT-ReFreSH/WebLedger?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/HIT-ReFreSH/WebLedger?style=flat-square)
 ![GitHub repo size](https://img.shields.io/github/repo-size/HIT-ReFreSH/WebLedger?style=flat-square)
 ![GitHub code size](https://img.shields.io/github/languages/code-size/HIT-ReFreSH/WebLedger?style=flat-square)
 
 This project is a convenience and simple .NET Web Ledger Server & Cli.
-**Notice: DesignTimeDbContextFactory is gitignored for pravicy.**
 
 ## Environment Requirement
 
-.NET 7 SDK is required for development or compiling the source, and the binary could be native-ready
+.NET 8 SDK is required for development or compiling the source, and the binary could be native-ready
+
+## Usage
+
+### Prepare Database
+
+You need a MySQL server `$host` deployed, and an account `$user` with `$pwd` with access on schema `$dbname`.
+
+Variables here is just for easy description, and you can get the connection string `server=$host; port=3306; database=$dbname; user=$user; password=$pwd; Persist Security Info=False; Connect Timeout=300`
+
+### Deploy Server
+
+```bash
+docker pull hitrefresh/web-legder
+docker run hitrefresh/web-legder \
+  -n legder \
+  -p <target-port>:80 \
+  -e WL_SQL='<connection-string>'
+```
+
+## For Developers
+
+### Build Image
+
+```bash
+cd web
+dotnet publish --os linux /t:PublishContainer
+cd cli
+dotnet publish --os linux /t:PublishContainer
+```
 
 ## Deployment/Initialize
 
@@ -22,7 +53,7 @@ Assuming you already have the binaries.
 
 ### Prepare Database
 
-You need a MySQL server `$host` deployed, and a account `$user` with `$pwd` with access on schema `$dbname`.
+You need a MySQL server `$host` deployed, and an account `$user` with `$pwd` with access on schema `$dbname`.
 
 Variables here is just for easy description.
 
