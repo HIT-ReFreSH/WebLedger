@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddPlaceholderResolver();
 
-var mysql = builder.Configuration.GetConnectionString("mysql");
+var mysql = builder.Configuration["ConnectionStrings:mysql"];
+//Console.WriteLine(mysql);
 // Add services to the container.
 builder.Services
     .AddEndpointsApiExplorer()
@@ -22,7 +23,7 @@ builder.Services.AddSingleton<AccessMiddleware>();
 builder.Services.AddDbContext<LedgerContext>(
     c => c.UseMySql(
         mysql,
-        new MySqlServerVersion(new Version(8, 0, 22)),
+        ServerVersion.AutoDetect(mysql),
         b => b.MigrationsAssembly("WebLedger")));
 builder.Services.AddRazorPages();
 
