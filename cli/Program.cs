@@ -1,19 +1,22 @@
-﻿using PlasticMetal.MobileSuit;
+﻿using HitRefresh.MobileSuit;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using HitReFreSH.WebLedger.CLI.Services;
-using HitReFreSH.WebLedger.Services;
+using HitRefresh.WebLedger.CLI.Services;
+using HitRefresh.WebLedger.Services;
 using System.Net.Http;
-using HitReFreSH.WebLedger.Data;
+using HitRefresh.WebLedger.Data;
 using Microsoft.EntityFrameworkCore;
-using HitReFreSH.WebLedger.CLI;
+using HitRefresh.WebLedger.CLI;
 using Microsoft.Extensions.Hosting;
+using Steeltoe.Extensions.Configuration.Placeholder;
 
 var builder = Suit.CreateBuilder();
 
-builder.Configuration.AddJsonFile("config.json");
+builder.Configuration
+       .AddJsonFile("config.json")
+       .AddPlaceholderResolver();
 builder.Services.AddLogging();
 builder.Services.AddScoped<WebGuiHelper>();
 if (builder.Configuration["target"] == "http")

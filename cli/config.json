@@ -1,0 +1,7 @@
+{
+  "target": "$WL_METHOD",
+  "host": "$WL_HOST",
+  "host-mysql": "$WL_SQL",
+  "access": "$WL_ACCESS",
+  "secret": "$WL_SECRET"
+}

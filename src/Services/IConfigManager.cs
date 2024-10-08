@@ -1,6 +1,6 @@
-﻿using HitReFreSH.WebLedger.Data;
+﻿using HitRefresh.WebLedger.Data;
 
-namespace HitReFreSH.WebLedger.Services;
+namespace HitRefresh.WebLedger.Services;
 
 public interface IConfigManager
 {

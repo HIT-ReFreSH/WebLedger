@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HitReFreSH.WebLedger.Data;
+namespace HitRefresh.WebLedger.Data;
 
 public class LedgerEntryType
 {

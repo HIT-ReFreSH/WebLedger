@@ -1,6 +1,6 @@
-﻿using HitReFreSH.WebLedger.Models;
+﻿using HitRefresh.WebLedger.Models;
 using Microsoft.Extensions.DependencyInjection;
-using PlasticMetal.MobileSuit;
+using HitRefresh.MobileSuit;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
-namespace HitReFreSH.WebLedger.CLI.Services;
+namespace HitRefresh.WebLedger.CLI.Services;
 
 public class WebGuiHelper
 {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HitReFreSH.WebLedger.Data;
+namespace HitRefresh.WebLedger.Data;
 
 public class LedgerEntry
 {

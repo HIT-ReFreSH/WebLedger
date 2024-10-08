@@ -1,9 +1,12 @@
-using HitReFreSH.WebLedger.Data;
-using HitReFreSH.WebLedger.Services;
-using HitReFreSH.WebLedger.Web.Services;
+using HitRefresh.WebLedger.Data;
+using HitRefresh.WebLedger.Services;
+using HitRefresh.WebLedger.Web.Services;
 using Microsoft.EntityFrameworkCore;
+using Steeltoe.Extensions.Configuration.Placeholder;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddPlaceholderResolver();
 
 var mysql = builder.Configuration.GetConnectionString("mysql");
 // Add services to the container.

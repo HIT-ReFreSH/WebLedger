@@ -1,6 +1,6 @@
-﻿using HitReFreSH.WebLedger.Data;
+﻿using HitRefresh.WebLedger.Data;
 
-namespace HitReFreSH.WebLedger.Web.Services;
+namespace HitRefresh.WebLedger.Web.Services;
 
 public class AccessMiddleware : IMiddleware
 {

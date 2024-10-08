@@ -1,4 +1,4 @@
-﻿namespace HitReFreSH.WebLedger.Models;
+﻿namespace HitRefresh.WebLedger.Models;
 
 public record Entry(decimal Amount, DateTime GivenTime, string Type, string? Category, string? Description)
 {

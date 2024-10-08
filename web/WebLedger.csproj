@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>a6c30a8c-6954-4d39-8755-32dfee3e5fbb</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<RootNamespace>HitReFreSH.WebLedger.Web</RootNamespace>
+		<RootNamespace>HitRefresh.WebLedger.Web</RootNamespace>
 		<AssemblyName>WebLedger</AssemblyName>
 		<GenerateDocumentFile>true</GenerateDocumentFile>
 
@@ -24,6 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+		<PackageReference Include="Steeltoe.Extensions.Configuration.PlaceholderBase" Version="3.2.8" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
 	</ItemGroup>

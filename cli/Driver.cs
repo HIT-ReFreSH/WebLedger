@@ -1,13 +1,12 @@
 ﻿using System.Drawing;
-using HitReFreSH.WebLedger.Data;
-using HitReFreSH.WebLedger.Models;
-using HitReFreSH.WebLedger.Services;
-using PlasticMetal.MobileSuit;
-using PlasticMetal.MobileSuit.UI;
-using System.Xml.Linq;
-using HitReFreSH.WebLedger.CLI.Services;
+using HitRefresh.WebLedger.Data;
+using HitRefresh.WebLedger.Models;
+using HitRefresh.WebLedger.Services;
+using HitRefresh.MobileSuit;
+using HitRefresh.MobileSuit.UI;
+using HitRefresh.WebLedger.CLI.Services;
 
-namespace HitReFreSH.WebLedger.CLI;
+namespace HitRefresh.WebLedger.CLI;
 
 [SuitInfo("WebLedger")]
 public class Driver

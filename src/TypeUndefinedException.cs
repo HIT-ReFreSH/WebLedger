@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace HitReFreSH.WebLedger;
+namespace HitRefresh.WebLedger;
 
 [Serializable]
 public class TypeUndefinedException : Exception

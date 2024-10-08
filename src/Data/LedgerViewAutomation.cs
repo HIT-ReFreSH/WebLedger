@@ -1,7 +1,7 @@
 ﻿#pragma warning disable 8618
 using System.ComponentModel.DataAnnotations;
 
-namespace HitReFreSH.WebLedger.Data;
+namespace HitRefresh.WebLedger.Data;
 
 /// <summary>
 /// Notice: The Automation with larger type index will be Unexecuted if and only if

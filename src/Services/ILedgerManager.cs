@@ -1,6 +1,6 @@
-﻿using HitReFreSH.WebLedger.Models;
+﻿using HitRefresh.WebLedger.Models;
 
-namespace HitReFreSH.WebLedger.Services;
+namespace HitRefresh.WebLedger.Services;
 
 public interface ILedgerManager
 {

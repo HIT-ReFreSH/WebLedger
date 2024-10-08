@@ -4,8 +4,8 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>HitReFreSH.WebLedger</RootNamespace>
-		<AssemblyName>HitReFreSH.WebLedger</AssemblyName>
+		<RootNamespace>HitRefresh.WebLedger</RootNamespace>
+		<AssemblyName>HitRefresh.WebLedger</AssemblyName>
 		<GenerateDocumentFile>true</GenerateDocumentFile>
 
 		<Company>HitReFreSH</Company>

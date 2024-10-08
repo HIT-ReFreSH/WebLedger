@@ -13,7 +13,7 @@ publish/
 publish.zip
 DesignTimeDbContextFactory.cs
 appsettings.Development.json
-config.json
+#config.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

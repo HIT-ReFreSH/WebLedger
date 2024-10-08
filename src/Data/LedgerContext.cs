@@ -1,7 +1,7 @@
-﻿using HitReFreSH.WebLedger.Models;
+﻿using HitRefresh.WebLedger.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HitReFreSH.WebLedger.Data;
+namespace HitRefresh.WebLedger.Data;
 
 public class LedgerContext : DbContext
 {

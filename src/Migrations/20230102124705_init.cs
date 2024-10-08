@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace HitReFreSH.WebLedger.Migrations
+namespace HitRefresh.WebLedger.Migrations
 {
     /// <inheritdoc />
     public partial class init : Migration

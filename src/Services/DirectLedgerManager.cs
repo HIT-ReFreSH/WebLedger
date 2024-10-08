@@ -1,10 +1,10 @@
-﻿using HitReFreSH.WebLedger.Data;
-using HitReFreSH.WebLedger.Models;
+﻿using HitRefresh.WebLedger.Data;
+using HitRefresh.WebLedger.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 
-namespace HitReFreSH.WebLedger.Services;
+namespace HitRefresh.WebLedger.Services;
 
 public class DirectLedgerManager : ILedgerManager
 {

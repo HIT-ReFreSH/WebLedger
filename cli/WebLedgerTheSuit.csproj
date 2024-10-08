@@ -5,8 +5,8 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>HitReFreSH.WebLedger.CLI</RootNamespace>
-		<AssemblyName>WebLedgerTheSuit</AssemblyName>
+		<RootNamespace>HitRefresh.WebLedger.CLI</RootNamespace>
+		<AssemblyName>wladm</AssemblyName>
 		<GenerateDocumentFile>true</GenerateDocumentFile>
 
 		<Company>HitReFreSH</Company>
@@ -21,14 +21,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="HitRefresh.MobileSuit" Version="4.3.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-		<PackageReference Include="PlasticMetal.MobileSuit" Version="4.2.1" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+		<PackageReference Include="Steeltoe.Extensions.Configuration.PlaceholderCore" Version="3.2.8" />
 	</ItemGroup>
 
 	<ItemGroup>

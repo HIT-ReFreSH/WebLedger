@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using System.Web;
-using HitReFreSH.WebLedger.Models;
-using HitReFreSH.WebLedger.Services;
+using HitRefresh.WebLedger.Models;
+using HitRefresh.WebLedger.Services;
 
-namespace HitReFreSH.WebLedger.CLI.Services;
+namespace HitRefresh.WebLedger.CLI.Services;
 
 public class HttpLedgerManager : ILedgerManager
 {

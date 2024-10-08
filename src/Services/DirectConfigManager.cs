@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using HitReFreSH.WebLedger.Data;
+using HitRefresh.WebLedger.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace HitReFreSH.WebLedger.Services;
+namespace HitRefresh.WebLedger.Services;
 
 public class DirectConfigManager : IConfigManager
 {

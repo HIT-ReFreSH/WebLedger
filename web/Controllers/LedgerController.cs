@@ -1,9 +1,9 @@
-﻿using HitReFreSH.WebLedger.Models;
-using HitReFreSH.WebLedger.Services;
+﻿using HitRefresh.WebLedger.Models;
+using HitRefresh.WebLedger.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
-namespace HitReFreSH.WebLedger.Web.Controllers;
+namespace HitRefresh.WebLedger.Web.Controllers;
 
 [Route("[controller]")]
 public class LedgerController : Controller

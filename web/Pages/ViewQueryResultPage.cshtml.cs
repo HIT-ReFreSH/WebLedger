@@ -1,9 +1,9 @@
-using HitReFreSH.WebLedger.Models;
-using HitReFreSH.WebLedger.Services;
+using HitRefresh.WebLedger.Models;
+using HitRefresh.WebLedger.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace HitReFreSH.WebLedger.Web.Pages;
+namespace HitRefresh.WebLedger.Web.Pages;
 
 public record ChartJsDataSet(string Label, List<decimal> Data, List<string> BackgroundColor, List<string> BorderColor,
     decimal BorderWidth);

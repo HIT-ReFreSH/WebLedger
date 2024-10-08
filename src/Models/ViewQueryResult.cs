@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HitReFreSH.WebLedger.Models;
+namespace HitRefresh.WebLedger.Models;
 
 public record ViewQueryResult(List<Entry> Raw, 
     Dictionary<string, decimal> ByCategory,

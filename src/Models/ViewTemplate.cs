@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HitReFreSH.WebLedger.Models;
+namespace HitRefresh.WebLedger.Models;
 
 public record ViewTemplate(string Name,string[] Categories,bool IsIncome)
 {

@@ -1,7 +1,7 @@
-﻿using HitReFreSH.WebLedger.Services;
+﻿using HitRefresh.WebLedger.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HitReFreSH.WebLedger.Web.Controllers;
+namespace HitRefresh.WebLedger.Web.Controllers;
 
 [Route("[controller]")]
 public class ConfigController : Controller

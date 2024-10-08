@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HitReFreSH.WebLedger;
+namespace HitRefresh.WebLedger;
 
 [Serializable]
 public class ViewTemplateUndefinedException : Exception
