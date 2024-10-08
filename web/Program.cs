@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddPlaceholderResolver();
 
 var mysql = builder.Configuration["ConnectionStrings:mysql"];
-//Console.WriteLine(mysql);
+Console.WriteLine(mysql);
 // Add services to the container.
 builder.Services
     .AddEndpointsApiExplorer()
