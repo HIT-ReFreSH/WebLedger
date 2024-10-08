@@ -30,8 +30,9 @@ Variables here is just for easy description.
 ```bash
 docker pull hitrefresh/web-legder:0.3.1
 docker run hitrefresh/web-legder:0.3.1 \
-  -n legder \
-  -p <target-port>:80 \
+  --name legder \
+  --restart always \
+  -p 313:8080 \
   -e WL_SQL_HOST='<host>' \
   -e WL_SQL_HOST='<user>' \
   -e WL_SQL_PWD='<pwd>' 
@@ -42,8 +43,7 @@ docker run hitrefresh/web-legder:0.3.1 \
 ### Build Image
 
 ```bash
-cd web
-dotnet publish --os linux /t:PublishContainer
+docker build -t hitrefresh/weblegder:0.3.1 . -f .\web\Dockerfile
 cd cli
 dotnet publish --os linux /t:PublishContainer
 ```

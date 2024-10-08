@@ -2,19 +2,22 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["WebLedger/WebLedger.csproj", "WebLedger/"]
-RUN dotnet restore "WebLedger/WebLedger.csproj"
+COPY *.sln .
+COPY web/*.csproj ./web/
+COPY src/*.csproj ./src/
+COPY cli/*.csproj ./cli/
+RUN dotnet restore
+
 COPY . .
-WORKDIR "/src/WebLedger"
-RUN dotnet build "WebLedger.csproj" -c Release -o /app/build
+WORKDIR "/src/web"
+RUN dotnet build -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WebLedger.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
