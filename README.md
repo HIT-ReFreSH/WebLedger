@@ -24,16 +24,17 @@ This project is a convenience and simple .NET Web Ledger Server & Cli.
 
 You need a MySQL server `$host` deployed, and an account `$user` with `$pwd` with access on schema `$dbname`.
 
-Variables here is just for easy description, and you can get the connection string `server=$host; port=3306; database=$dbname; user=$user; password=$pwd; Persist Security Info=False; Connect Timeout=300`
-
+Variables here is just for easy description.
 ### Deploy Server
 
 ```bash
-docker pull hitrefresh/web-legder
-docker run hitrefresh/web-legder \
+docker pull hitrefresh/web-legder:0.3.1
+docker run hitrefresh/web-legder:0.3.1 \
   -n legder \
   -p <target-port>:80 \
-  -e WL_SQL='<connection-string>'
+  -e WL_SQL_HOST='<host>' \
+  -e WL_SQL_HOST='<user>' \
+  -e WL_SQL_PWD='<pwd>' 
 ```
 
 ## For Developers
