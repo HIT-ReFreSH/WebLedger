@@ -4,9 +4,9 @@
 
 # WebLedger
 
-![DockerHub-v](https://img.shields.io/docker/v/hitrefresh/web-legder?style=flat-square)
-![DockerHub-DL](https://img.shields.io/docker/pulls/hitrefresh/web-legder?style=flat-square)
-![DockerHub-size](https://img.shields.io/docker/image-size/hitrefresh/web-legder?style=flat-square)
+![DockerHub-v](https://img.shields.io/docker/v/hitrefresh/web-ledger?style=flat-square)
+![DockerHub-DL](https://img.shields.io/docker/pulls/hitrefresh/web-ledger?style=flat-square)
+![DockerHub-size](https://img.shields.io/docker/image-size/hitrefresh/web-ledger?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/HIT-ReFreSH/WebLedger?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/HIT-ReFreSH/WebLedger?style=flat-square)
 ![GitHub repo size](https://img.shields.io/github/repo-size/HIT-ReFreSH/WebLedger?style=flat-square)
@@ -28,15 +28,48 @@ Variables here is just for easy description.
 ### Deploy Server
 
 ```bash
-docker pull hitrefresh/web-legder:0.3.1
-docker run hitrefresh/web-legder:0.3.1 \
-  --name legder \
+docker pull hitrefresh/web-ledger:0.3.1 # if you can access the docker hub; if not, build it by yourself
+docker run -tid \
+  --name ledger \
   --restart always \
-  -p 313:8080 \
+  -p <port>:8080 \
+  -e WL_SQL_DB='<dbname>' \
   -e WL_SQL_HOST='<host>' \
   -e WL_SQL_HOST='<user>' \
-  -e WL_SQL_PWD='<pwd>' 
+  -e WL_SQL_PWD='<pwd>' \
+  hitrefresh/web-ledger:0.3.1
 ```
+
+### Start CLI (Direct)
+
+```bash
+docker pull hitrefresh/web-ledger-cli:0.3.1 # if you can access the docker hub; if not, build it by yourself
+docker run --rm -i\
+  --name ledger-cli \
+  -e WL_METHOD='mysql' \
+  -e WL_SQL_DB='<dbname>' \
+  -e WL_SQL_HOST='<host>' \
+  -e WL_SQL_HOST='<user>' \
+  -e WL_SQL_PWD='<pwd>' \
+  hitrefresh/web-ledger-cli:0.3.1
+```
+
+And then you can configure the access.
+
+### Start CLI (Remote)
+
+```bash
+docker pull hitrefresh/web-ledger-cli:0.3.1 # if you can access the docker hub; if not, build it by yourself
+docker run --rm -i \
+  --name ledger-cli \
+  -e WL_METHOD='http' \
+  -e WL_HOST='<http-or-https-url>' \
+  -e WL_ACCESS='<access>' \
+  -e WL_SECRET='<secret>' \
+  hitrefresh/web-ledger-cli:0.3.1
+```
+
+And then you can configure the access.
 
 ## For Developers
 
