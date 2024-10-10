@@ -15,8 +15,10 @@ using Steeltoe.Extensions.Configuration.Placeholder;
 var builder = Suit.CreateBuilder();
 
 builder.Configuration
+       .AddEnvironmentVariables()
        .AddJsonFile("config.json")
        .AddPlaceholderResolver();
+
 builder.Services.AddLogging();
 builder.Services.AddScoped<WebGuiHelper>();
 if (builder.Configuration["target"] == "http")
@@ -34,7 +36,7 @@ if (builder.Configuration["target"] == "http")
 }
 else
 {
-    var mysql = builder.Configuration["host-sql"];
+    var mysql = builder.Configuration["host-mysql"];
     builder.Services.AddScoped<IConfigManager, DirectConfigManager>();
     builder.Services.AddScoped<ILedgerManager, DirectLedgerManager>();
 
