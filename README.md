@@ -25,10 +25,13 @@ This project is a convenience and simple .NET Web Ledger Server & Cli.
 You need a MySQL server `$host` deployed, and an account `$user` with `$pwd` with access on schema `$dbname`.
 
 Variables here is just for easy description.
+
 ### Deploy Server
 
 ```bash
-docker pull hitrefresh/web-ledger:0.3.1 # if you can access the docker hub; if not, build it by yourself
+docker pull hitrefresh/web-ledger:0.3.1 
+# if you are in China, use aliyun mirror: 
+# docker pull registry.cn-hangzhou.aliyuncs.com/hitrefresh/web-ledger:0.3.1
 docker run -tid \
   --name ledger \
   --restart always \
@@ -43,7 +46,9 @@ docker run -tid \
 ### Start CLI (Direct)
 
 ```bash
-docker pull hitrefresh/web-ledger-cli:0.3.1 # if you can access the docker hub; if not, build it by yourself
+docker pull hitrefresh/web-ledger-cli:0.3.1
+# if you are in China, use aliyun mirror: 
+# docker pull registry.cn-hangzhou.aliyuncs.com/hitrefresh/web-ledger-cli:0.3.1
 docker run --rm -i\
   --name ledger-cli \
   -e WL_METHOD='mysql' \
