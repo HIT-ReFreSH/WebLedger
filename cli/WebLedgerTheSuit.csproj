@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>HitRefresh.WebLedger.CLI</RootNamespace>
+        <AssemblyName>wladm</AssemblyName>
+        <GenerateDocumentFile>true</GenerateDocumentFile>
+
+        <Company>HitReFreSH</Company>
+        <PackageProjectUrl>https://github.com/HIT-ReFreSH/WebLedger</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/HIT-ReFreSH/WebLedger.git</RepositoryUrl>
+        <RepositoryType>Github</RepositoryType>
+        <Version>0.3.1</Version>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Nullable>enable</Nullable>
+        <LangVersion>12</LangVersion>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <ContainerRepository>hitrefresh/web-ledger-cli</ContainerRepository>
+        <ContainerImageTag>$(Version)</ContainerImageTag>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <IsPublishable>true</IsPublishable>
+        <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="HitRefresh.MobileSuit" Version="4.3.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+        <PackageReference Include="Microsoft.NET.Build.Containers" Version="8.0.402"/>
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+        <PackageReference Include="Steeltoe.Extensions.Configuration.PlaceholderCore" Version="3.2.8"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\src\LibWebLedger.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Microsoft.Extensions.Http">
+            <HintPath>C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\7.0.0\ref\net7.0\Microsoft.Extensions.Http.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="config.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>
