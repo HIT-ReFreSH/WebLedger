@@ -1,0 +1,24 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: none;
+  text-decoration: none;
+  font-family: "Fredoka", sans-serif;
+  letter-spacing: 1px;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: grey;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
