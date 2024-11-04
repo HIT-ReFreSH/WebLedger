@@ -1,14 +1,4 @@
-<template>
-    <el-card>
-        <h2>报表</h2>
-        <el-table :data="summary" style="width: 100%">
-            <el-table-column prop="category" label="类别" />
-            <el-table-column prop="total" label="总金额" />
-        </el-table>
-    </el-card>
-</template>
-
-<script>
+<script lang="ts" setup>
 import { ref, computed, defineProps } from 'vue'
 const props = defineProps({
     records: {
@@ -33,8 +23,14 @@ const summary = computed(
 )
 </script>
 
-<style scoped>
-.el-card {
-    width: 100%;
-}
-</style>
+<template>
+    <el-card shadow="always" style="width: 100%;">
+        <h2>报表</h2>
+        <el-table :data="summary" style="width: 100%" height="180">
+            <el-table-column prop="category" label="类别" />
+            <el-table-column prop="total" label="总金额" />
+        </el-table>
+    </el-card>
+</template>
+
+<style scoped lang="scss"></style>

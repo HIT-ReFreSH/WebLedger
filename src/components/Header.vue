@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
 import { ElMessage } from 'element-plus'
 
 const open = () => {
@@ -6,17 +8,27 @@ const open = () => {
         message: '啥也没有',
         type: 'success',
     })
-}
+};
+const nav_list = ref([
+    { text: 'Home', active: true, id: 0, src: '/' },
+    { text: 'About', active: false, id: 1, src: '/about' },
+]);
+
+const onSwitch = (index: number) => {
+    nav_list.value.forEach(item => {
+        item.active = false;
+        if (item.id === index) item.active = true;
+    });
+};
 </script>
 
 <template>
     <header>
         <a class="logo" href="#hero">Report<span>Query.</span></a> <!--Left Section-->
         <nav> <!--Middle Section-->
-            <a class="nav-items active" href="#">Home</a>
-            <a class="nav-items" href="#">About</a>
-            <a class="nav-items" href="#">Gallery</a>
-            <a class="nav-items" href="#">Contacts</a>
+            <RouterLink v-for="item in nav_list" :key="item.id" :to="item.src"
+                :class="{ 'nav-item': true, 'active': item.active }" @click="onSwitch(item.id)">{{
+                    item.text }}</RouterLink>
         </nav>
 
         <button class="cta-btn" @click="open">Click</button> <!--Right Section-->

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import Report from '../components/Report.vue';
 import IncomeExpenseForm from '../components/IncomeExpenseForm.vue';
 import RecordList from '../components/RecordList.vue';
-import Report from '../components/Report.vue';
 
 
 onMounted(() => {
@@ -30,7 +30,7 @@ const fetchRecords = () => {
               <h1>账本系统</h1>
               <IncomeExpenseForm @record-added="fetchRecords" />
             </div>
-            <div class="container">
+            <div class="container big-container">
               <RecordList :records="records" />
               <Report :records="records" />
             </div>
@@ -107,21 +107,11 @@ section {
       }
     }
 
-    /* left Section
-        h3 {
-          font-size: 4rem;
-          letter-spacing: 20px;
-          color: white;
-        }
-    
-         
-    
-    */
     .left-section {
       display: flex;
       align-items: center;
       z-index: 1;
-      height: 70vh;
+      width: 100%;
 
       h1 {
         font-size: 3rem;
@@ -135,13 +125,20 @@ section {
         align-items: center;
         gap: 100px;
         padding: 30px;
+        width: 100%;
 
 
         .container {
           display: flex;
           flex-direction: column;
           align-items: center;
+          justify-content: center;
           gap: 30px;
+          width: 40%;
+        }
+
+        .big-container {
+          width: 50%;
         }
       }
 

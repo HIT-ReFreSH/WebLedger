@@ -5,13 +5,7 @@ import Header from '@/components/Header.vue';
 <template>
   <div id="hero">
     <Header />
-    <router-view v-slot="{ Component }">
-      <Transition name="fade" mode="out-in">
-        <KeepAlive>
-          <component :is="Component" />
-        </KeepAlive>
-      </Transition>
-    </router-view>
+    <router-view></router-view>
   </div>
 </template>
 
