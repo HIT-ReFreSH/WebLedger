@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@vue/shared": "^3.5.12",
     "element-plus": "^2.8.7",
     "pinia": "^2.2.4",
     "sass": "^1.80.6",

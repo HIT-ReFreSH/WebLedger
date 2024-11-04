@@ -824,7 +824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/shared@npm:3.5.12, @vue/shared@npm:^3.5.0":
+"@vue/shared@npm:3.5.12, @vue/shared@npm:^3.5.0, @vue/shared@npm:^3.5.12":
   version: 3.5.12
   resolution: "@vue/shared@npm:3.5.12"
   checksum: 10c0/48f94406c42921901b21a57a7ebb401bbceb497152baf0554e5d5a11cbaa79958f966042e9d95614c0b02e8681b7e1b6c010fcb8b28c6bda1b090f2ddd7540d8
@@ -2101,6 +2101,7 @@ __metadata:
     "@tsconfig/node20": "npm:^20.1.4"
     "@types/node": "npm:^20.17.0"
     "@vitejs/plugin-vue": "npm:^5.1.4"
+    "@vue/shared": "npm:^3.5.12"
     "@vue/tsconfig": "npm:^0.5.1"
     element-plus: "npm:^2.8.7"
     npm-run-all2: "npm:^7.0.1"
