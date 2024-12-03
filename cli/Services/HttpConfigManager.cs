@@ -20,4 +20,14 @@ public class HttpConfigManager(HttpClient http) : IConfigManager
     {
         return await http.GetFromJsonAsync<LedgerAccess[]>("/config/access") ?? Array.Empty<LedgerAccess>();
     }
+
+    public Task<bool> CheckAccess(string name, string key)
+    {
+        return null;
+    }
+
+    public Task<bool> CheckDuplicate(string name)
+    {
+        return null;
+    }
 }

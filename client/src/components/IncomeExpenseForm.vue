@@ -1,45 +1,74 @@
 <script lang="ts" setup>
 import { ref, onMounted, defineEmits } from 'vue'
-const form = ref({
-    name: '',
+import { getCategories, type Entry,addEntry } from '@/api/record';
+const form = ref<Entry>({
+    isIncome: false,
     amount: 0,
-    category: []
+    givenTime: '',
+    type: '',
+    category: '',
+    description: ''
 })
-const categories = ref(['食品', '交通', '娱乐', '其他'])
+const categories = ref<any[]>([])
 const emit = defineEmits(['record-added'])
 
-const addRecord = () => {
-    console.log('simon');
-
-    const records = JSON.parse(localStorage.getItem('records')) || [];
-    records.push({ ...form.value, date: new Date() });
-    localStorage.setItem('records', JSON.stringify(records));
-    emit('record-added');
-    resetForm();
+const addRecord = async () => {
+    if(!checkForm()){
+        ElMessage.error('请完整填写表单');
+        return;
+    }   
+    form.value.givenTime = new Date(form.value.givenTime).toISOString();
+    if(!form.value.isIncome){
+        form.value.amount=-Math.abs(form.value.amount);
+    }
+    const res = await addEntry(form.value);
+    if(res?.status===200){
+        window.location.reload();
+    }
 }
-const resetForm = () => {
-    form.value.name = '';
-    form.value.amount = 0;
-    form.value.category = [];
+const checkForm = (): boolean => {
+    return form.value.amount !== 0 && form.value.type !== '' && form.value.category !== '' && form.value.description !== '' && form.value.givenTime!=='';
 }
+onMounted(async () => {
+    const res = await getCategories();
+    if(res?.status===200){
+        res.data.forEach((item: any) => {
+            categories.value.push(item.name);
+        })
+    }
+})
 </script>
 
 <template>
     <el-form :model="form" @submit.prevent="addRecord">
         <el-form-item required>
-            <label slot="label" style="color:#fff;font-size: 18px;">条目名称</label>
-            <el-input v-model="form.name" />
+            <el-radio-group v-model="form.isIncome">
+                <el-radio :label="true" style="color:#fff;font-size: 18px;">收入</el-radio>
+                <el-radio :label="false" style="color:#fff;font-size: 18px;">支出</el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item required>
+            <el-date-picker v-model="form.givenTime" type="datetime" placeholder="入账时间" />
+        </el-form-item>
+        <el-form-item required>
+            <label slot="label" style="color:#fff;font-size: 18px;">分类</label>
+            <el-select v-model="form.category" placeholder="请选择分类">
+                <el-option v-for="category in categories" :key="category" :label="category" :value="category" />
+            </el-select>
+        </el-form-item>
+        <el-form-item required>
+            <label slot="label" style="color:#fff;font-size: 18px;">具体类别</label>
+            <el-input v-model="form.type"  placeholder="如饮料，水果"/>
+        </el-form-item>
+        <el-form-item required>
+            <label slot="label" style="color:#fff;font-size: 18px;">描述</label>
+            <el-input v-model="form.description" placeholder="对这笔账目的描述" />
         </el-form-item>
         <el-form-item required>
             <label slot="label" style="color:#fff;font-size: 18px;margin-right: 20px;">金额</label>
             <el-input-number v-model="form.amount" />
         </el-form-item>
-        <el-form-item>
-            <label slot="label" style="color:#fff;font-size: 18px;">类别</label>
-            <el-select v-model="form.category" multiple>
-                <el-option v-for="category in categories" :key="category" :label="category" :value="category" />
-            </el-select>
-        </el-form-item>
+        
         <button class="big-cta-btn" type="submit">添加记录</button>
     </el-form>
 </template>

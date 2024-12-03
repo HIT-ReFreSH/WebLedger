@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
 
 import { ElMessage } from 'element-plus'
 
@@ -10,8 +11,8 @@ const open = () => {
     })
 };
 const nav_list = ref([
-    { text: 'Home', active: true, id: 0, src: '/' },
-    { text: 'About', active: false, id: 1, src: '/about' },
+    { text: '记录收支', active: true, id: 0, src: '/' },
+    { text: '查看报表', active: false, id: 1, src: '/about' },
 ]);
 
 const onSwitch = (index: number) => {

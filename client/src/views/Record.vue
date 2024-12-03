@@ -3,22 +3,27 @@ import { ref, onMounted } from 'vue'
 import Report from '../components/Report.vue';
 import IncomeExpenseForm from '../components/IncomeExpenseForm.vue';
 import RecordList from '../components/RecordList.vue';
+import Header from '../components/Header.vue';
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
-
-onMounted(() => {
-  fetchRecords()
-})
+const router = useRouter();
 
 const records = ref([])
-const fetchRecords = () => {
-  // Fetch records from API
-  const storedRecords = JSON.parse(localStorage.getItem('records')) || [];
-  records.value = storedRecords;
+
+const navigateToGithub = () => {
+  window.open('https://github.com/HIT-ReFreSH/WebLedger', '_blank');
 }
+onMounted(() => {
+  if(useUserStore().access==""||useUserStore().secret==""){
+    router.push('/');
+  }
+})
 </script>
 
 <template>
   <!--Hero section-->
+  <Header />
   <section>
     <div class="hero-section-container">
 
@@ -32,7 +37,6 @@ const fetchRecords = () => {
             </div>
             <div class="container big-container">
               <RecordList :records="records" />
-              <Report :records="records" />
             </div>
           </div>
         </div>
@@ -46,10 +50,7 @@ const fetchRecords = () => {
       </div>
 
       <div class="social-icons">
-        <i class="fa-brands fa-facebook"></i>
-        <i class="fa-brands fa-youtube"></i>
-        <i class="fa-brands fa-twitter"></i>
-        <i class="fa-brands fa-tiktok"></i>
+        <i class="fa-brands fa-github" @click="navigateToGithub"></i>
       </div>
 
     </div>
