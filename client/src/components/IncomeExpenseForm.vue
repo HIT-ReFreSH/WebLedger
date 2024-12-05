@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ref, onMounted, defineEmits } from 'vue'
 import { getCategories, type Entry,addEntry } from '@/api/record';
+import { ElMessage } from 'element-plus';
+
 const form = ref<Entry>({
     isIncome: false,
     amount: 0,

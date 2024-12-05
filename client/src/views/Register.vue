@@ -2,6 +2,7 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { register } from "@/api/user";
+import { ElMessage } from "element-plus";
 
 const registerForm = reactive({
   username: "",

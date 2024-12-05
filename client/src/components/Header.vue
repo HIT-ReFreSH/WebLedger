@@ -4,6 +4,9 @@ import { useUserStore } from '@/stores/user'
 
 import { ElMessage } from 'element-plus'
 
+const props = defineProps<{
+    activeItem: number
+}>()
 const open = () => {
     ElMessage({
         message: '啥也没有',
@@ -11,8 +14,9 @@ const open = () => {
     })
 };
 const nav_list = ref([
-    { text: '记录收支', active: true, id: 0, src: '/' },
-    { text: '查看报表', active: false, id: 1, src: '/about' },
+    { text: '记录收支', active: props.activeItem === 0, id: 0, src: '/' },
+    { text: '查看报表', active: props.activeItem === 1, id: 1, src: '/about' },
+    { text: '分类管理', active: props.activeItem === 2, id: 2, src: '/setting' },
 ]);
 
 const onSwitch = (index: number) => {
@@ -27,9 +31,12 @@ const onSwitch = (index: number) => {
     <header>
         <a class="logo" href="#hero">Report<span>Query.</span></a> <!--Left Section-->
         <nav> <!--Middle Section-->
-            <RouterLink v-for="item in nav_list" :key="item.id" :to="item.src"
-                :class="{ 'nav-item': true, 'active': item.active }" @click="onSwitch(item.id)">{{
-                    item.text }}</RouterLink>
+            <RouterLink 
+                v-for="item in nav_list" :key="item.id" :to="item.src"
+                :class="{ 'nav-item': true, 'active': item.active }" 
+                @click="onSwitch(item.id)">
+                {{item.text }}
+            </RouterLink>
         </nav>
 
         <button class="cta-btn" @click="open">Click</button> <!--Right Section-->

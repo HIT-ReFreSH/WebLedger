@@ -7,6 +7,7 @@ import Header from '../components/Header.vue';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 
+
 const router = useRouter();
 
 const records = ref([])
@@ -23,7 +24,7 @@ onMounted(() => {
 
 <template>
   <!--Hero section-->
-  <Header />
+  <Header :activeItem="0" />
   <section>
     <div class="hero-section-container">
 
@@ -33,7 +34,7 @@ onMounted(() => {
           <div class="left-content-container">
             <div class="container">
               <h1>账本系统</h1>
-              <IncomeExpenseForm @record-added="fetchRecords" />
+              <IncomeExpenseForm />
             </div>
             <div class="container big-container">
               <RecordList :records="records" />

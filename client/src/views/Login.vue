@@ -101,8 +101,10 @@ onMounted(() => {
             <el-checkbox v-model="loginForm.rememberMe">记住用户名和密码</el-checkbox>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="handleLogin">登录</el-button>
-            <el-button type="text" @click="navigateToRegister">注册</el-button>
+            <div style="width:100%;display:flex;justify-content:flex-end;">
+              <el-button type="text" @click="navigateToRegister">注册</el-button>
+              <el-button type="primary" @click="handleLogin">登录</el-button>
+            </div>
           </el-form-item>
         </el-form>
       </el-card>
