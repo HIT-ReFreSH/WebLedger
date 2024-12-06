@@ -1,57 +1,64 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import Report from '../components/Report.vue';
-import IncomeExpenseForm from '../components/IncomeExpenseForm.vue';
-import RecordList from '../components/RecordList.vue';
+import { ref, onMounted } from "vue";
+import Report from "../components/Report.vue";
+import IncomeExpenseForm from "../components/IncomeExpenseForm.vue";
+import RecordList from "../components/RecordList.vue";
 
+interface Record {
+  name: string;
+  amount: number;
+  category: string[];
+  date: string;
+}
+
+const records = ref<Record[]>([]);
 
 onMounted(() => {
-  fetchRecords()
-})
+  fetchRecords();
+});
 
-const records = ref([])
 const fetchRecords = () => {
-  // Fetch records from API
-  const storedRecords = JSON.parse(localStorage.getItem('records')) || [];
-  records.value = storedRecords;
-}
+  const storedRecords = localStorage.getItem("records");
+  records.value = storedRecords ? JSON.parse(storedRecords) : [];
+};
 </script>
 
 <template>
-  <!--Hero section-->
   <section>
     <div class="hero-section-container">
-
-      <div class="hero-content"> <!--Hero Content-->
-
-        <div class="left-section">
-          <div class="left-content-container">
-            <div class="container">
-              <h1>账本系统</h1>
-              <IncomeExpenseForm @record-added="fetchRecords" />
-            </div>
-            <div class="container big-container">
-              <RecordList :records="records" />
-              <Report :records="records" />
-            </div>
+      <div class="content-grid">
+        <div class="form-section">
+          <div class="header-content">
+            <h1>个人记账本</h1>
+            <p class="subtitle">轻松记录每一笔收支</p>
           </div>
+          <IncomeExpenseForm @record-added="fetchRecords" />
         </div>
 
-        <div class="right-section">
-          <div class="image-wrap">
-            <img src="../assets/img/planet.png" alt="planet image">
+        <div class="records-section">
+          <div class="records-wrapper">
+            <RecordList :records="records" @record-deleted="fetchRecords" />
+          </div>
+          <div class="report-wrapper">
+            <Report :records="records" />
           </div>
         </div>
-
       </div>
 
       <div class="social-icons">
-        <i class="fa-brands fa-facebook"></i>
-        <i class="fa-brands fa-youtube"></i>
-        <i class="fa-brands fa-twitter"></i>
-        <i class="fa-brands fa-tiktok"></i>
+        <a href="https://github.com" target="_blank" title="GitHub">
+          <i class="fa-brands fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com" target="_blank" title="LinkedIn">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+        <a href="https://www.instagram.com" target="_blank" title="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://discord.com" target="_blank" title="Discord">
+          <i class="fa-brands fa-discord"></i>
+        </a>
       </div>
-
     </div>
   </section>
 </template>
@@ -61,193 +68,151 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
 }
 
 .hero-section-container {
-  background-color: rgba(255, 255, 255, 0.1);
-  height: 85vh;
-  width: 85%;
+  background: rgba(255, 255, 255, 0.1);
+  min-height: 85vh;
+  width: 90%;
+  max-width: 1400px;
   border-radius: 30px;
-  border: 2px solid rgba(211, 211, 211, 0.2);
-  backdrop-filter: blur(8px);
-
-  /* Hero Content */
-  .hero-content {
-    padding: 15px 25px 0 25px;
-    display: grid;
-    grid-template-columns: 4fr 1fr;
-
-    img {
-      width: 90%;
-      filter: drop-shadow(0 0 10px rgb(0, 225, 225)) drop-shadow(0 0 20px rgb(0, 225, 225)) drop-shadow(0 0 40px rgb(0, 225, 225)) drop-shadow(0 0 100px rgb(0, 225, 225));
-    }
-
-    .right-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      /* Right Section Animation */
-      @keyframes rotatePlanet {
-        from {
-          transform: rotate(0deg);
-        }
-
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .image-wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        animation: rotatePlanet 120s linear infinite;
-      }
-    }
-
-    .left-section {
-      display: flex;
-      align-items: center;
-      z-index: 1;
-      width: 100%;
-
-      h1 {
-        font-size: 3rem;
-        font-weight: 800;
-        color: white;
-        margin: -20px 0 0 0;
-      }
-
-      .left-content-container {
-        display: flex;
-        align-items: center;
-        gap: 100px;
-        padding: 30px;
-        width: 100%;
-
-
-        .container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 30px;
-          width: 40%;
-        }
-
-        .big-container {
-          width: 50%;
-        }
-      }
-
-    }
-  }
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.social-icons {
-  color: white;
-  display: flex;
-  justify-content: center;
+.content-grid {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 30px;
+  height: 100%;
+  padding: 80px 0 20px 0;
+}
+
+.form-section {
+  padding: 0 30px;
+}
+
+.records-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   gap: 20px;
+  padding: 0 30px;
 }
 
-.social-icons i {
-  font-size: 18px;
-  width: 10px;
-  height: 10px;
-  border: 1px solid white;
-  padding: 15px;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s;
+.records-wrapper,
+.report-wrapper {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.social-icons i:hover {
-  color: rgb(0, 225, 225);
-  border-color: rgb(0, 225, 225);
-  transform: rotate(360deg) scale(1.1);
-}
-
-/* Hero Section Animation */
-@keyframes sideInLeft {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-}
-
-@keyframes sideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-}
-
-@keyframes topIn {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-
-@keyframes bottomIn {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-
-h3 {
-  animation: sideInLeft 1s ease-out forwards;
-  opacity: 0;
+.header-content {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 h1 {
-  animation: sideInLeft 1s ease-out forwards;
-  opacity: 0;
-  animation-delay: 0.4s;
+  font-size: 36px;
+  color: white;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-p {
-  animation: sideInLeft 1s ease-out forwards;
-  opacity: 0;
-  animation-delay: 0.6s;
+.subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+}
+
+.right-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .image-wrap {
+    animation: float 6s ease-in-out infinite;
+    img {
+      width: 100%;
+      max-width: 300px;
+      filter: drop-shadow(0 0 10px rgba(0, 225, 225, 0.5));
+    }
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .social-icons {
-  animation: bottomIn 1s ease-out forwards;
-  opacity: 0;
-  animation-delay: 0.2s;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+  a {
+    color: white;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    padding: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    &:hover {
+      transform: translateY(-3px);
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+  }
 }
 
-.right-section img {
-  animation: sideInRight 1s ease-out forwards;
-  opacity: 0;
-  animation-delay: 0.2s;
+// 响应式设计
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+  }
+
+  .right-section {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .left-content-container {
+    flex-direction: column;
+    gap: 30px !important;
+
+    .container {
+      width: 100% !important;
+    }
+  }
 }
 </style>

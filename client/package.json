@@ -11,12 +11,13 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
-    "@vue/shared": "^3.5.12",
-    "element-plus": "^2.8.7",
-    "pinia": "^2.2.4",
-    "sass": "^1.80.6",
-    "vue": "^3.5.12",
-    "vue-router": "^4.4.5"
+    "@element-plus/icons-vue": "^2.3.1",
+    "@vue/shared": "^3.4.21",
+    "element-plus": "^2.6.1",
+    "pinia": "^2.1.7",
+    "sass": "^1.71.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
