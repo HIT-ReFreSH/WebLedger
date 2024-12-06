@@ -7,17 +7,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ElButton: typeof import('element-plus/es')['ElButton']
-    ElCard: typeof import('element-plus/es')['ElCard']
-    ElForm: typeof import('element-plus/es')['ElForm']
-    ElFormItem: typeof import('element-plus/es')['ElFormItem']
-    ElIcon: typeof import('element-plus/es')['ElIcon']
-    ElInput: typeof import('element-plus/es')['ElInput']
-    ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
-    ElOption: typeof import('element-plus/es')['ElOption']
-    ElSelect: typeof import('element-plus/es')['ElSelect']
-    ElTable: typeof import('element-plus/es')['ElTable']
-    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    AddAutomation: typeof import('./src/components/AddAutomation.vue')['default']
+    AddCategory: typeof import('./src/components/AddCategory.vue')['default']
+    AddTemplate: typeof import('./src/components/AddTemplate.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     IncomeExpenseForm: typeof import('./src/components/IncomeExpenseForm.vue')['default']
     RecordList: typeof import('./src/components/RecordList.vue')['default']
