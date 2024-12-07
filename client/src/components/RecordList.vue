@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, defineProps, computed, onMounted } from 'vue'
 import { type Entry, type SelectOption, selectEntries,getCategories } from '@/api/record'
+import { ElMessage } from 'element-plus';
 const entries = ref<Entry[]>([])
 const filters = ref<SelectOption>({
   dateRange: ['', ''],

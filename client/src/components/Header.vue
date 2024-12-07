@@ -3,16 +3,32 @@ import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
     activeItem: number
 }>()
+const router = useRouter()
+
+// 用于计数点击次数
+const clickCount = ref(0)
+
+// 点击按钮的处理函数
 const open = () => {
+    // 输出消息
     ElMessage({
-        message: '啥也没有',
+        message: '版本号3.1.1',
         type: 'success',
     })
-};
+
+    // 增加点击次数
+    clickCount.value++
+
+    // 如果点击次数达到 5 次，跳转到 /account
+    if (clickCount.value >= 5) {
+        router.push('/account')
+    }
+    };
 const nav_list = ref([
     { text: '记录收支', active: props.activeItem === 0, id: 0, src: '/' },
     { text: '查看报表', active: props.activeItem === 1, id: 1, src: '/about' },

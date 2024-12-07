@@ -3,6 +3,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { login } from '@/api/user';
 import { useUserStore } from '@/stores/user';
+import { ElMessage } from 'element-plus';
 
 // 定义响应式数据
 const loginForm = reactive({
@@ -127,4 +128,3 @@ onMounted(() => {
     margin-bottom: 20px;
   }
   </style>
-  
