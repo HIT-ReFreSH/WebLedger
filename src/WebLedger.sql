@@ -14,6 +14,9 @@ CREATE TABLE `Access` (
     CONSTRAINT `PK_Access` PRIMARY KEY (`Name`)
 ) CHARACTER SET=utf8mb4;
 
+INSERT INTO `Access` (`Name`, `Key`)
+VALUES ('admin', 'admin123');
+
 CREATE TABLE `Categories` (
     `Name` varchar(64) CHARACTER SET utf8mb4 NOT NULL,
     `SuperCategoryName` varchar(64) CHARACTER SET utf8mb4 NULL,

@@ -1,12 +1,15 @@
 ﻿using HitRefresh.WebLedger.Services;
 using Microsoft.AspNetCore.Mvc;
 using HitRefresh.WebLedger.Web.Models;
+using System.Threading.Tasks;
 
 namespace HitRefresh.WebLedger.Web.Controllers;
 
 [Route("[controller]")]
 public class ConfigController(IConfigManager configManager) : Controller
 {
+    // 之前已有的方法保持不变，此处省略重复的详细注释
+
     [HttpGet("grant")]
     public async Task<IActionResult> AddAccess([FromQuery] string name)
     {
@@ -25,16 +28,18 @@ public class ConfigController(IConfigManager configManager) : Controller
     {
         return Ok(await configManager.GetAllAccess());
     }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Key) || !await configManager.CheckAccess(request.Name, request.Key))
+        if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Key) ||!await configManager.CheckAccess(request.Name, request.Key))
         {
             return Ok("{\"code\":401,\"message\":\"无效的Name或Key\"}");
         }
 
         return Ok("{\"code\":200,\"message\":\"登录成功\"}");
     }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] LoginRequest request)
     {
@@ -45,4 +50,6 @@ public class ConfigController(IConfigManager configManager) : Controller
         var key = await configManager.AddAccess(request.Name);
         return Ok("{\"code\":200,\"message\":\"注册成功\",\"key\":\"" + key + "\"}");
     }
+
+    
 }
