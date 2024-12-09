@@ -15,19 +15,34 @@ const categories = ref<any[]>([])
 const emit = defineEmits(['record-added'])
 
 const addRecord = async () => {
-    if(!checkForm()){
-        ElMessage.error('请完整填写表单');
+    if (!checkForm()) {
+        ElMessage.error({
+            message: '请完整填写表单',
+            duration: 5000,  // 设置显示时间为 5 秒
+        });
         return;
-    }   
+    }
+
     form.value.givenTime = new Date(form.value.givenTime).toISOString();
-    if(!form.value.isIncome){
-        form.value.amount=-Math.abs(form.value.amount);
+    if (!form.value.isIncome) {
+        form.value.amount = -Math.abs(form.value.amount);  // 确保支出金额为负数
     }
+
     const res = await addEntry(form.value);
-    if(res?.status===200){
-        window.location.reload();
+    if (res?.status === 200) {
+        ElMessage.success({
+            message: '记录提交成功！',
+            duration: 5000,  // 设置显示时间为 5 秒
+        });
+        window.location.reload();  // 刷新页面
+    } else {
+        ElMessage.error({
+            message: '提交记录失败，请稍后再试。',
+            duration: 5000,  // 设置显示时间为 5 秒
+        });
     }
-}
+};
+
 const checkForm = (): boolean => {
     return form.value.amount !== 0 && form.value.type !== '' && form.value.category !== '' && form.value.description !== '' && form.value.givenTime!=='';
 }

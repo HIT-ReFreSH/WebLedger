@@ -27,7 +27,7 @@
           placeholder="请输入新的 Access 名称"
           style="margin-right: 10px;"
         />
-        <el-button :loading="isLoading" type="primary" @click="handleAddAccess">添加</el-button>
+        <el-button type="primary" @click="handleAddAccess">添加</el-button>
       </div>
     </el-card>
   </div>
@@ -36,21 +36,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { addAccess, removeAccess, getAllAccess } from "@/api/user";
+import { addAccess, removeAccess, getAllAccess } from "@/api/user"; // 你之前提供的接口方法
 
 // 数据状态
-const accessList = ref<Access[]>([]);
+const accessList = ref<Array<{ name: string; key: string }>>([]);
 const newAccessName = ref("");
-const isLoading = ref(false);
-
-// 错误处理
-const handleError = (error: unknown) => {
-  if (error instanceof Error) {
-    ElMessage.error("请求失败：" + error.message);
-  } else {
-    ElMessage.error("请求失败，未知错误");
-  }
-};
 
 // 获取所有 Access
 const fetchAccessList = async () => {
@@ -64,34 +54,33 @@ const fetchAccessList = async () => {
     } else {
       ElMessage.error("获取 Access 列表失败");
     }
-  } catch (error) {
-    handleError(error);
+  } catch (error: unknown) {
+    // 错误类型为 unknown，进行类型检查
+    if (error instanceof Error) {
+      ElMessage.error("请求失败：" + error.message);
+    } else {
+      ElMessage.error("请求失败，未知错误");
+    }
   }
-};
-
-// 验证 Access 名称
-const validateAccessName = (name: string) => {
-  const regex = /^[a-zA-Z0-9_-]{3,20}$/;
-  return regex.test(name);
 };
 
 // 添加新的 Access
 const handleAddAccess = async () => {
-  if (isLoading.value) return; // 防止重复提交
-  if (!newAccessName.value.trim() || !validateAccessName(newAccessName.value)) {
-    ElMessage.error("请输入有效的 Access 名称（3-20个字符，仅允许字母、数字、短划线和下划线）");
+  if (!newAccessName.value.trim()) {
+    ElMessage.error("请输入 Access 名称");
     return;
   }
-  isLoading.value = true;
   try {
-    await addAccess(newAccessName.value);
+    const secret = await addAccess(newAccessName.value);
     ElMessage.success("Access 添加成功");
     newAccessName.value = ""; // 清空输入框
     fetchAccessList(); // 刷新列表
-  } catch (error) {
-    handleError(error);
-  } finally {
-    isLoading.value = false;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      ElMessage.error("请求失败：" + error.message);
+    } else {
+      ElMessage.error("请求失败，未知错误");
+    }
   }
 };
 
@@ -99,16 +88,20 @@ const handleAddAccess = async () => {
 const handleDeleteAccess = async (name: string) => {
   try {
     await ElMessageBox.confirm(
-      `确认删除 Access：${name} 吗？删除后无法恢复，请谨慎操作！`,
+      `确认删除 Access：${name} 吗？`,
       "删除确认",
       { type: "warning" }
     );
     await removeAccess(name);
     ElMessage.success("Access 删除成功");
-    fetchAccessList();
-  } catch (error) {
+    fetchAccessList(); // 刷新列表
+  } catch (error: unknown) {
     if (error !== "cancel") {
-      handleError(error);
+      if (error instanceof Error) {
+        ElMessage.error("请求失败：" + error.message);
+      } else {
+        ElMessage.error("请求失败，未知错误");
+      }
     }
   }
 };
@@ -124,13 +117,12 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* 使用视口高度，保证全屏显示 */
-  min-height: 500px; /* 最小高度 */
-  background-image: url('/client\src\assets\img\lake.jpg');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-color: rgba(255, 255, 255, 0.2);
+  height: 960px;
+  background-image: url('/client\src\assets\img\lake.jpg'); /* 背景图片路径 */
+  background-size: cover; /* 图片覆盖整个背景 */
+  background-position: center center; /* 确保图片居中显示 */
+  background-repeat: no-repeat; /* 防止背景图片重复 */
+  background-color: rgba(255, 255, 255, 0.2); /* 透明白色背景，透明度50% */
 }
 
 .accounts-card {

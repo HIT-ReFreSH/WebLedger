@@ -342,7 +342,7 @@
 
 "@tsconfig/node20@^20.1.4":
   version "20.1.4"
-  resolved "https://registry.npmmirror.com/@tsconfig/node20/-/node20-20.1.4.tgz"
+  resolved "https://registry.npmjs.org/@tsconfig/node20/-/node20-20.1.4.tgz"
   integrity sha512-sqgsT69YFeLWf5NtJ4Xq/xAF8p4ZQHlmGW74Nu2tD4+g5fAsposc4ZfaaPixVu4y01BEiDCWLRDCvDM5JOsRxg==
 
 "@types/estree@^1.0.0", "@types/estree@1.0.6":
