@@ -86,6 +86,11 @@ And then you can configure the access.
 
 ## For Developers
 
+### Quick Start Guides
+
+- **[Getting Started Guide](./docs/getting-started.md)** - Quick setup and backend development
+- **[Frontend Integration Guide](./docs/frontend-integration.md)** - Build React/Vue apps with TypeScript
+
 ### Build Image
 
 ```bash
