@@ -67,4 +67,14 @@ public class DirectConfigManager(LedgerContext database, ILogger<DirectLedgerMan
 
         return sb.ToString();
     }
+    public async Task<bool> CheckAccess(string name, string key)
+    {
+        var access = await database.Access.FirstOrDefaultAsync(a => a.Name == name && a.Key == key);
+        return access != null;
+    }
+    public async Task<bool> CheckDuplicate(string name)
+    {
+        var access = await database.Access.FirstOrDefaultAsync(a => a.Name == name);
+        return access != null;
+    }
 }
