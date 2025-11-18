@@ -1,4 +1,4 @@
-﻿// ggf. anpassen, je nachdem wo deine Exceptions liegen:
+﻿using Xunit;
 using HitRefresh.WebLedger;
 using HitRefresh.WebLedger.Web.Models.Error;
 using HitRefresh.WebLedger.Web.Services;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Text;
 using System.Text.Json;
-using Xunit;
+
 
 namespace WebLedger.Tests;
 

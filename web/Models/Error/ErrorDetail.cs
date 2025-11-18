@@ -1,5 +1,8 @@
 ﻿namespace HitRefresh.WebLedger.Web.Models.Error;
 
+/// <summary>
+/// Represents a single structured error description returned to API clients.
+/// </summary>
 public sealed class ErrorDetail
 {
     public string Code { get; init; } = default!;

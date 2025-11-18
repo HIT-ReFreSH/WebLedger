@@ -8,7 +8,10 @@ using System.Diagnostics;
 using HitRefresh.WebLedger.Web.Models.Error;
 using Microsoft.AspNetCore.Http;
 
-
+/// <summary>
+/// Global exception handling middleware that intercepts unhandled exceptions
+/// and returns API-standardized JSON error responses.
+/// </summary>
 public sealed class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -34,6 +37,7 @@ public sealed class ErrorHandlingMiddleware
         }
     }
 
+    // Writes an API-standard error response to the client.
     private static async Task WriteErrorResponseAsync(HttpContext context, Exception ex)
     {
         var requestId = Activity.Current?.Id ?? context.TraceIdentifier;

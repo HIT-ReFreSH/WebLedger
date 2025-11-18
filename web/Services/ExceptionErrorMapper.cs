@@ -1,6 +1,10 @@
 ﻿
 namespace HitRefresh.WebLedger.Web.Services;
 
+/// <summary>
+/// Maps internal domain exceptions to HTTP status codes and API error codes.
+/// Centralizes exception-to-response logic so the middleware remains clean.
+/// </summary>
 public static class ExceptionErrorMapper
 {
     public static (int statusCode, string errorCode, string message) Map(Exception ex)
@@ -18,6 +22,7 @@ public static class ExceptionErrorMapper
                 "The specified view template does not exist."
             ),
 
+            // Default fallback
             _ => (
                 StatusCodes.Status500InternalServerError,
                 "INTERNAL_SERVER_ERROR",
