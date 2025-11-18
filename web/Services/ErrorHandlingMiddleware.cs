@@ -6,6 +6,8 @@ namespace HitRefresh.WebLedger.Web.Services;
 
 using System.Diagnostics;
 using HitRefresh.WebLedger.Web.Models.Error;
+using Microsoft.AspNetCore.Http;
+
 
 public sealed class ErrorHandlingMiddleware
 {
@@ -34,27 +36,30 @@ public sealed class ErrorHandlingMiddleware
 
     private static async Task WriteErrorResponseAsync(HttpContext context, Exception ex)
     {
-        // RequestId: use Activity.Id or TraceIdentifier
         var requestId = Activity.Current?.Id ?? context.TraceIdentifier;
+
+        var (statusCode, errorCode, message) = ExceptionErrorMapper.Map(ex);
 
         var error = new ErrorResponse
         {
             Error = new ErrorDetail
             {
-                Code = "INTERNAL_SERVER_ERROR",
-                Message = "An unexpected error occurred.",
-                Details = ex.Message,  // only for Development
+                Code = errorCode,
+                Message = message,
+                Details = ex.Message,
                 RequestId = requestId
             }
         };
 
-        // If something has already been written, reset Response  (!!)
         context.Response.Clear();
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.StatusCode = statusCode;
         context.Response.ContentType = "application/json";
 
         await context.Response.WriteAsJsonAsync(error);
-
-        // TODO : refining the mapping(TYPE_UNDEFINED, 404, 400 etc.).
     }
+
+
 }
+
+
+
