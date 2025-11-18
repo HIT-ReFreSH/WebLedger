@@ -11,6 +11,8 @@ builder.Configuration.AddPlaceholderResolver();
 var mysql = builder.Configuration["ConnectionStrings:mysql"];
 //Console.WriteLine(mysql);
 // Add services to the container.
+builder.Services.AddScoped<AccessMiddleware>();
+
 builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
@@ -35,6 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseMiddleware<ErrorHandlingMiddleware>();
 
 }
 else
