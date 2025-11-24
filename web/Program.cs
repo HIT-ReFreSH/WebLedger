@@ -14,6 +14,19 @@ var mysql = builder.Configuration["ConnectionStrings:mysql"];
 builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
+
+// Add CORS support for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<IConfigManager, DirectConfigManager>();
 builder.Services.AddScoped<ILedgerManager, DirectLedgerManager>();
@@ -24,7 +37,7 @@ builder.Services.AddDbContext<LedgerContext>(
     c => c.UseMySql(
         mysql,
         ServerVersion.AutoDetect(mysql),
-        b => b.MigrationsAssembly("WebLedger")));
+        b => b.MigrationsAssembly("HitRefresh.WebLedger")));
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -50,6 +63,10 @@ else
 
 app.UseStaticFiles();
 app.UseRouting();
+
+// Enable CORS
+app.UseCors("AllowFrontend");
+
 app.UseAuthorization();
 app.UseMiddleware<AccessMiddleware>();
 app.MapRazorPages();

@@ -9,7 +9,12 @@
       "Bash(chmod:*)",
       "Bash(bash:*)",
       "Bash(pnpm add:*)",
-      "Bash(pnpm install)"
+      "Bash(pnpm install)",
+      "Bash(npm install:*)",
+      "Bash(mysql:*)",
+      "Bash(netstat:*)",
+      "Bash(ss:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

@@ -47,7 +47,7 @@ export function AppLayout() {
   }
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh', background: '#f5f7fa' }}>
       <Sider
         collapsible
         collapsed={collapsed}
@@ -60,17 +60,20 @@ export function AppLayout() {
           left: 0,
           top: 0,
           bottom: 0,
+          boxShadow: '2px 0 8px rgba(0, 0, 0, 0.1)',
         }}
+        theme="dark"
       >
         <div
           style={{
-            color: token.colorTextBase,
-            padding: 16,
+            color: '#fff',
+            padding: collapsed ? '16px 8px' : '20px 16px',
             fontWeight: 700,
-            fontSize: collapsed ? '14px' : '18px',
+            fontSize: collapsed ? '16px' : '20px',
             textAlign: 'center',
-            background: 'rgba(255, 255, 255, 0.1)',
-            transition: 'all 0.2s',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            transition: 'all 0.3s',
+            letterSpacing: collapsed ? '0px' : '1px',
           }}
         >
           {collapsed ? 'WL' : 'WebLedger'}
@@ -79,6 +82,7 @@ export function AppLayout() {
           selectedKeys={[selectedKey]}
           theme="dark"
           mode="inline"
+          style={{ marginTop: '8px' }}
           items={[
             {
               key: 'dashboard',
@@ -108,51 +112,101 @@ export function AppLayout() {
           ]}
         />
       </Sider>
-      <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: 'all 0.2s' }}>
+      <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: 'all 0.3s', background: '#f5f7fa' }}>
         <Header
           style={{
-            background: token.colorBgContainer,
-            padding: '0 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            background: '#fff',
+            padding: '12px 32px',
             borderBottom: `1px solid ${token.colorBorderSecondary}`,
             position: 'sticky',
             top: 0,
-            zIndex: 1,
+            zIndex: 10,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+            height: 'auto',
+            minHeight: 'auto',
           }}
         >
-          <Breadcrumb items={getBreadcrumb()} />
-          <Space size="middle" wrap>
-            <Text type="secondary" style={{ fontSize: '13px' }}>
-              <LockOutlined /> 访问控制
-            </Text>
-            <Tooltip title="访问名称 (wl-access)">
-              <Input
-                placeholder="wl-access"
-                value={accessName}
-                onChange={(e) => setAccessName(e.target.value)}
-                style={{ width: 140 }}
-                prefix={<KeyOutlined />}
-                size="small"
-              />
-            </Tooltip>
-            <Tooltip title="访问密钥 (wl-secret)">
-              <Input.Password
-                placeholder="wl-secret"
-                value={secret}
-                onChange={(e) => setSecret(e.target.value)}
-                style={{ width: 160 }}
-                size="small"
-              />
-            </Tooltip>
-          </Space>
+          {/* 宽屏布局：所有元素在一行 */}
+          <div className="header-wide" style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'nowrap',
+            gap: '16px',
+          }}>
+            <Breadcrumb items={getBreadcrumb()} style={{ flex: '0 1 auto', minWidth: 0 }} />
+            <Space size="middle" style={{ flex: '0 0 auto', whiteSpace: 'nowrap' }}>
+              <Text type="secondary" style={{ fontSize: '14px', fontWeight: 500 }} className="access-label">
+                <LockOutlined /> 访问控制
+              </Text>
+              <Tooltip title="访问名称 (wl-access)">
+                <Input
+                  placeholder="wl-access"
+                  value={accessName}
+                  onChange={(e) => setAccessName(e.target.value)}
+                  style={{ width: 150, borderRadius: '6px' }}
+                  prefix={<KeyOutlined />}
+                  size="middle"
+                />
+              </Tooltip>
+              <Tooltip title="访问密钥 (wl-secret)">
+                <Input.Password
+                  placeholder="wl-secret"
+                  value={secret}
+                  onChange={(e) => setSecret(e.target.value)}
+                  style={{ width: 170, borderRadius: '6px' }}
+                  size="middle"
+                />
+              </Tooltip>
+            </Space>
+          </div>
+
+          {/* 窄屏布局：三行排列 */}
+          <div className="header-narrow" style={{ display: 'none' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <Breadcrumb items={getBreadcrumb()} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Tooltip title="访问名称 (wl-access)">
+                <Input
+                  placeholder="wl-access"
+                  value={accessName}
+                  onChange={(e) => setAccessName(e.target.value)}
+                  style={{ width: '100%', maxWidth: '320px', borderRadius: '6px' }}
+                  prefix={<KeyOutlined />}
+                  size="middle"
+                />
+              </Tooltip>
+              <Tooltip title="访问密钥 (wl-secret)">
+                <Input.Password
+                  placeholder="wl-secret"
+                  value={secret}
+                  onChange={(e) => setSecret(e.target.value)}
+                  style={{ width: '100%', maxWidth: '320px', borderRadius: '6px' }}
+                  size="middle"
+                />
+              </Tooltip>
+            </div>
+          </div>
         </Header>
-        <Content style={{ padding: 24, minHeight: 'calc(100vh - 64px - 70px)' }}>
+        <Content
+          style={{
+            padding: '32px',
+            minHeight: 'calc(100vh - 150px)',
+            background: '#f5f7fa',
+          }}
+        >
           <Outlet />
         </Content>
-        <Footer style={{ textAlign: 'center', background: token.colorBgContainer }}>
-          <Text type="secondary">
+        <Footer
+          style={{
+            textAlign: 'center',
+            background: '#fff',
+            borderTop: `1px solid ${token.colorBorderSecondary}`,
+            padding: '20px',
+          }}
+        >
+          <Text type="secondary" style={{ fontSize: '14px' }}>
             WebLedger ©{new Date().getFullYear()} - 现代化财务管理系统
           </Text>
         </Footer>

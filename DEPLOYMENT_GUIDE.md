@@ -16,6 +16,7 @@ WebLedger 是一个基于 .NET 8 + React 的账本管理系统，包含：
 - **MySQL 8.0+**: [下载地址](https://dev.mysql.com/downloads/mysql/)
 
 ### 可选工具
+
 - **Docker**: 用于容器化部署
 - **MySQL Workbench**: 数据库管理工具
 
@@ -118,7 +119,7 @@ sudo apt-get install -y dotnet-sdk-8.0
 brew install dotnet-sdk
 ```
 
-### 2.2 还原依赖并构建
+### 2.2 还原依赖并构建（到此）
 
 ```bash
 # 进入项目根目录
@@ -205,7 +206,7 @@ dotnet WebLedger.dll
 
 ## 3. 前端部署 (React)
 
-### 3.1 安装 Node.js 和 npm
+### 3.1 安装 Node.js 和 pnpm
 
 #### Windows
 ```bash
@@ -240,11 +241,25 @@ brew install node
 cd frontend
 
 # 安装项目依赖
-npm install
-
-# 或者使用 yarn（如果已安装）
-yarn install
+pnpm install
 ```
+
+**主要依赖说明：**
+
+| 依赖包 | 版本 | 说明 |
+|--------|------|------|
+| `react` | ^19.2.0 | React 框架 |
+| `antd` | ^5.29.0 | Ant Design UI 组件库 |
+| `dayjs` | ^1.11.19 | 日期处理库（Ant Design DatePicker 必需） |
+| `@tanstack/react-query` | ^5.90.10 | 数据请求和缓存管理 |
+| `@tanstack/react-router` | ^1.136.8 | 路由管理 |
+| `zod` | ^4.1.12 | 数据验证 |
+| `@ant-design/icons` | ^6.1.0 | Ant Design 图标库 |
+
+**注意事项：**
+- `dayjs` 是 Ant Design 5.x 的 DatePicker 和 RangePicker 组件的必需依赖
+- 如果缺少 `dayjs`，日期选择器会报错：`date4.isValid is not a function`
+- 推荐使用 Node.js 20.x 或 22.x 版本以获得最佳兼容性
 
 ### 3.3 开发环境启动
 

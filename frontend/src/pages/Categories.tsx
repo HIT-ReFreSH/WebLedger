@@ -48,96 +48,168 @@ export default function Categories() {
   }
 
   return (
-    <div>
-      <Title level={3}>
-        <FolderOutlined /> 分类管理
-      </Title>
-      <Text type="secondary">管理您的财务分类和层级结构</Text>
+    <div style={{ width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{
+        marginBottom: 32,
+        padding: '24px',
+        background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+        borderRadius: '16px',
+        boxShadow: '0 8px 24px rgba(250, 112, 154, 0.25)'
+      }}>
+        <Title level={2} style={{ marginBottom: 8, color: '#fff' }}>
+          <FolderOutlined /> 分类管理
+        </Title>
+        <Text style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.9)' }}>
+          管理您的财务分类和层级结构
+        </Text>
+      </div>
 
-      <Space direction="vertical" size="large" style={{ width: '100%', marginTop: 16 }}>
+      <Space direction="vertical" size="large" style={{ width: '100%' }}>
         <Card
           title={
             <Space>
               <PlusOutlined />
-              <span>新增/更新分类</span>
+              <Text strong style={{ fontSize: '16px', color: '#2d3748' }}>新增/更新分类</Text>
             </Space>
           }
+          style={{
+            borderRadius: '16px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+            border: 'none',
+            background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)'
+          }}
         >
-          <Form layout="inline" form={form} onFinish={onFinish}>
-            <Form.Item
-              name="name"
-              rules={[{ required: true, message: '请输入分类名' }]}
-            >
-              <Input
-                placeholder="分类名称（必填）"
-                style={{ width: 200 }}
-                prefix={<FolderOutlined />}
-              />
-            </Form.Item>
-            <Form.Item name="superCategory">
-              <Input
-                placeholder="父分类（可选）"
-                style={{ width: 200 }}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={save.isPending}
-                icon={<SaveOutlined />}
+          <div style={{
+            padding: '20px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '12px'
+          }}>
+            <Form layout="inline" form={form} onFinish={onFinish}>
+              <Form.Item
+                name="name"
+                rules={[{ required: true, message: '请输入分类名' }]}
+                style={{ marginBottom: '16px' }}
               >
-                保存
-              </Button>
-            </Form.Item>
-          </Form>
+                <Input
+                  placeholder="分类名称（必填）"
+                  style={{ width: 240, borderRadius: '8px' }}
+                  prefix={<FolderOutlined />}
+                  size="large"
+                />
+              </Form.Item>
+              <Form.Item name="superCategory" style={{ marginBottom: '16px' }}>
+                <Input
+                  placeholder="父分类（可选）"
+                  style={{ width: 240, borderRadius: '8px' }}
+                  size="large"
+                />
+              </Form.Item>
+              <Form.Item style={{ marginBottom: '16px' }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={save.isPending}
+                  icon={<SaveOutlined />}
+                  size="large"
+                  style={{ borderRadius: '8px', paddingLeft: 32, paddingRight: 32 }}
+                >
+                  保存
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
 
-          <div style={{ marginTop: 16, padding: 12, background: '#f5f5f5', borderRadius: 4 }}>
-            <Text type="secondary" style={{ fontSize: '13px' }}>
-              <strong>提示：</strong>
-              <ul style={{ margin: '8px 0 0 0', paddingLeft: 20 }}>
-                <li>如果分类名称已存在，将会更新该分类的信息</li>
-                <li>父分类用于建立分类的层级关系</li>
-                <li>删除分类前请确保没有条目使用该分类</li>
-              </ul>
+          <div style={{
+            marginTop: 20,
+            padding: '16px',
+            background: 'rgba(255, 255, 255, 0.7)',
+            borderRadius: '8px'
+          }}>
+            <Text strong style={{ fontSize: '14px', color: '#2d3748', display: 'block', marginBottom: 8 }}>
+              提示：
             </Text>
+            <ul style={{ margin: '8px 0 0 0', paddingLeft: 20, color: '#4a5568', lineHeight: '1.8' }}>
+              <li>如果分类名称已存在，将会更新该分类的信息</li>
+              <li>父分类用于建立分类的层级关系</li>
+              <li>删除分类前请确保没有条目使用该分类</li>
+            </ul>
           </div>
         </Card>
 
         {isLoading ? (
-          <div style={{ textAlign: 'center', padding: '30px' }}>
+          <div style={{
+            textAlign: 'center',
+            padding: '60px',
+            background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+            borderRadius: '16px'
+          }}>
             <Spin size="large" tip="加载中..." />
           </div>
         ) : (
-          <Card title={`分类列表 (共 ${rows.length} 个)`}>
+          <Card
+            title={
+              <Text strong style={{ fontSize: '16px', color: '#2d3748' }}>
+                分类列表 (共 {rows.length} 个)
+              </Text>
+            }
+            style={{
+              borderRadius: '16px',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+              border: 'none'
+            }}
+          >
             <Table
               rowKey={(r) => r.name}
               dataSource={rows}
-              pagination={{ pageSize: 10, showSizeChanger: true, showTotal: (total) => `共 ${total} 个分类` }}
+              pagination={{
+                pageSize: 10,
+                showSizeChanger: true,
+                showTotal: (total) => `共 ${total} 个分类`
+              }}
+              style={{ borderRadius: '12px' }}
               columns={[
                 {
-                  title: '分类名称',
+                  title: <Text strong>分类名称</Text>,
                   dataIndex: 'name',
                   sorter: (a, b) => a.name.localeCompare(b.name),
                   render: (name: string) => (
                     <Space>
-                      <FolderOutlined style={{ color: '#1890ff' }} />
-                      <Tag color="blue">{name}</Tag>
+                      <FolderOutlined style={{ color: '#667eea', fontSize: '16px' }} />
+                      <Tag
+                        color="blue"
+                        style={{
+                          fontSize: '14px',
+                          padding: '4px 12px',
+                          borderRadius: '6px',
+                          fontWeight: 500
+                        }}
+                      >
+                        {name}
+                      </Tag>
                     </Space>
                   ),
                 },
                 {
-                  title: '父分类',
+                  title: <Text strong>父分类</Text>,
                   dataIndex: 'superCategory',
                   render: (superCat: string | null) =>
                     superCat ? (
-                      <Tag color="purple">{superCat}</Tag>
+                      <Tag
+                        color="purple"
+                        style={{
+                          fontSize: '14px',
+                          padding: '4px 12px',
+                          borderRadius: '6px'
+                        }}
+                      >
+                        {superCat}
+                      </Tag>
                     ) : (
-                      <Text type="secondary">顶级分类</Text>
+                      <Text type="secondary" style={{ fontSize: '14px' }}>顶级分类</Text>
                     ),
                 },
                 {
-                  title: '操作',
+                  title: <Text strong>操作</Text>,
                   dataIndex: 'name',
                   width: 120,
                   render: (name: string) => (
@@ -153,6 +225,7 @@ export default function Categories() {
                         size="small"
                         icon={<DeleteOutlined />}
                         loading={remove.isPending}
+                        style={{ borderRadius: '6px' }}
                       >
                         删除
                       </Button>
