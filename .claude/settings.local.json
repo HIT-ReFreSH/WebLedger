@@ -7,7 +7,14 @@
       "Bash(gh issue create:*)",
       "Bash(gh label create:*)",
       "Bash(chmod:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install)",
+      "Bash(npm install:*)",
+      "Bash(mysql:*)",
+      "Bash(netstat:*)",
+      "Bash(ss:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
