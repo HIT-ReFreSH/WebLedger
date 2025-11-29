@@ -238,6 +238,16 @@ const mutation = useMutation({
 - 确保已导入 Ant Design 的 reset 样式
 - 检查 `src/main.tsx` 中是否包含 `import 'antd/dist/reset.css'`
 
+
+
+---
+
+## 详细部署
+
+**见根目录下DEPLOYMENT_GUIDE.md** 
+
+---
+
 ## 贡献指南
 
 欢迎提交 Issue 和 Pull Request！
