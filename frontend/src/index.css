@@ -1,0 +1,196 @@
+/* WebLedger 全局样式 - 现代化设计 */
+
+/* 重置基础样式 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 确保根元素占满全屏 */
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f5f7fa;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f3f5;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* 统一卡片过渡效果 */
+.ant-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ant-card-hoverable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 表格优化 */
+.ant-table-thead > tr > th {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #f8f9fa !important;
+}
+
+/* 按钮圆角优化 */
+.ant-btn {
+  transition: all 0.3s ease;
+}
+
+.ant-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* 输入框优化 */
+.ant-input,
+.ant-input-number,
+.ant-picker,
+.ant-select-selector {
+  transition: all 0.3s ease;
+}
+
+.ant-input:focus,
+.ant-input-number:focus,
+.ant-picker:focus,
+.ant-select-focused .ant-select-selector {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+/* Tag 优化 */
+.ant-tag {
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.ant-tag:hover {
+  transform: scale(1.05);
+}
+
+/* 进度条优化 */
+.ant-progress-bg {
+  transition: all 0.4s ease;
+}
+
+/* 菜单项优化 */
+.ant-menu-item-selected {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%) !important;
+}
+
+/* 面包屑优化 */
+.ant-breadcrumb {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 统计卡片数字优化 */
+.ant-statistic-content-value {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.5px;
+}
+
+/* 加载动画优化 */
+.ant-spin-dot-item {
+  background-color: #667eea;
+}
+
+/* 模态框优化 */
+.ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 消息提示优化 */
+.ant-message {
+  top: 24px;
+}
+
+.ant-message-notice-content {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 顶栏响应式布局 */
+/* 默认显示宽屏布局，隐藏窄屏布局 */
+.header-wide {
+  display: flex !important;
+}
+
+.header-narrow {
+  display: none !important;
+}
+
+/* 当屏幕宽度小于 900px 时切换到窄屏布局 */
+@media (max-width: 900px) {
+  .header-wide {
+    display: none !important;
+  }
+
+  .header-narrow {
+    display: block !important;
+  }
+}
+
+/* 面包屑文本截断优化（防止过长） */
+.ant-breadcrumb {
+  overflow: hidden;
+}
+
+.ant-breadcrumb-link {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+@media (max-width: 900px) {
+  .ant-breadcrumb-link {
+    max-width: none;
+  }
+}

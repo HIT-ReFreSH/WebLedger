@@ -21,6 +21,19 @@ builder.Services.AddScoped<AccessMiddleware>();
 builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
+
+// Add CORS support for frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<IConfigManager, DirectConfigManager>();
 builder.Services.AddScoped<ILedgerManager, DirectLedgerManager>();
@@ -36,8 +49,10 @@ var serverVersion = new MySqlServerVersion(new Version(8, 0, 22));
 builder.Services.AddDbContext<LedgerContext>(
     c => c.UseMySql(
         mysql,
+
         serverVersion,
         b => b.MigrationsAssembly("WebLedger")));
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -66,6 +81,7 @@ else
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors("AllowFrontend");
 // Health check endpoints - expose before AccessMiddleware so external monitors can access
 app.MapHealthChecks("/health");
 app.MapHealthChecks("/health/detailed", new HealthCheckOptions
@@ -91,6 +107,8 @@ app.MapHealthChecks("/health/detailed", new HealthCheckOptions
         await context.Response.WriteAsync(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
     }
 });
+// Enable CORS
+
 
 app.UseAuthorization();
 app.UseMiddleware<AccessMiddleware>();
