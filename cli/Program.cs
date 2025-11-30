@@ -11,7 +11,38 @@ using Microsoft.EntityFrameworkCore;
 using HitRefresh.WebLedger.CLI;
 using Microsoft.Extensions.Hosting;
 using Steeltoe.Extensions.Configuration.Placeholder;
+using System;
+using System.IO;
+using System.Text.Json;
 
+// 调试：检查配置读取
+Console.WriteLine("=== 配置调试信息 ===");
+Console.WriteLine("工作目录: " + Directory.GetCurrentDirectory());
+
+string configPath = "config.json";
+Console.WriteLine("配置文件路径: " + Path.GetFullPath(configPath));
+Console.WriteLine("配置文件存在: " + File.Exists(configPath));
+
+if (File.Exists(configPath))
+{
+    try
+    {
+        string configContent = File.ReadAllText(configPath);
+        Console.WriteLine("配置文件内容:");
+        Console.WriteLine(configContent);
+
+        // 尝试解析 JSON
+        var config = JsonSerializer.Deserialize<JsonElement>(configContent);
+        if (config.TryGetProperty("host", out var host))
+        {
+            Console.WriteLine("解析到的 host: " + host.GetString());
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("配置文件解析错误: " + ex.Message);
+    }
+}
 var builder = Suit.CreateBuilder();
 
 builder.Configuration

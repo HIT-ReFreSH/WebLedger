@@ -83,7 +83,41 @@ docker run --rm -i \
 ```
 
 And then you can configure the access.
+### Health Checks
 
+The application provides health check endpoints for monitoring system status, database connectivity, and external service availability.
+
+* **Basic Check**: `GET /health`
+  * Returns `Healthy` or `Unhealthy` string.
+  * Useful for load balancers or simple uptime monitoring.
+
+* **Detailed Check**: `GET /health/detailed`
+  * Returns JSON with detailed status of individual components (Database, External Services).
+  * Includes password masking for database connection strings in the output.
+  * Example response:
+    ```json
+    {
+      "status": "Healthy",
+      "totalDuration": "00:00:00.045",
+      "checks": [
+        {
+          "name": "database",
+          "status": "Healthy",
+          "description": "Database reachable",
+          "details": {
+             "connectionString.masked": "server=...;password=REDACTED",
+             "host": "localhost",
+             "port": "3306"
+          }
+        },
+        {
+          "name": "external_service",
+          "status": "Healthy",
+          "description": "No service URL configured"
+        }
+      ]
+    }
+    ```
 ## For Developers
 
 ### Quick Start Guides

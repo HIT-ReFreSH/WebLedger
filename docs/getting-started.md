@@ -171,6 +171,28 @@ curl -X GET http://localhost:5143/ledger/categories \
   -H "wl-secret: 5jH!3NNF$HQs@KV2Q427HnN0RXgCeA$w"
 ```
 
+### Health Checks (Monitoring)
+
+WebLedger exposes two health check endpoints for monitoring and Liveness/Readiness probes:
+
+- Basic health check: `GET /health` — returns HTTP 200 when healthy, 503 if any check fails.
+- Detailed health check: `GET /health/detailed` — returns detailed JSON with each check's status, durations and exceptions if any.
+
+Health checks include:
+
+- Database connectivity (attempts to open a connection to the configured MySQL database).
+- External service availability (optional): if `Monitoring:ServiceUrl` is configured in `appsettings.*.json` or environment variables, a GET request to that URL will be performed.
+
+Examples:
+
+```bash
+curl -sS http://localhost:5143/health
+curl -sS http://localhost:5143/health/detailed
+```
+
+If you want to test a failing database connection, update `web/appsettings.Development.json` to point to an invalid connection string and start the server; `/health` will then return non-200 (503) and `/health/detailed` will show the database check as `Unhealthy`.
+
+
 ## Available API Endpoints
 
 The main controllers are:
