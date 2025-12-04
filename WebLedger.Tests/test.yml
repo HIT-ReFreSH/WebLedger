@@ -1,0 +1,69 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Test with coverage
+      run: |
+        # 设置每个测试的超时时间为60秒
+        dotnet test \
+          --configuration Release \
+          --no-build \
+          --verbosity normal \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage \
+          --settings coverlet.runsettings \
+          --logger "console;verbosity=detailed" \
+          --blame-hang-timeout 60s \
+          --blame-hang-dump-type mini
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/**/coverage.cobertura.xml
+        flags: unittests
+        name: codecov-umbrella
+        
+    - name: Generate coverage report
+      run: |
+        dotnet tool install --global dotnet-reportgenerator-globaltool
+        reportgenerator \
+          -reports:./coverage/**/coverage.cobertura.xml \
+          -targetdir:./coverage-report \
+          -reporttypes:HtmlSummary
+    
+    - name: Check for test failures
+      run: |
+        # 检查是否有测试结果文件
+        if ls TestResults/*.trx 1> /dev/null 2>&1; then
+          echo "检查测试结果文件..."
+          if grep -r "FAIL\|Error" TestResults/*.trx; then
+            echo "发现测试失败"
+            exit 1
+          else
+            echo "所有测试通过"
+          fi
+        else
+          echo "未找到测试结果文件"
+        fi
