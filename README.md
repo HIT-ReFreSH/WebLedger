@@ -84,6 +84,11 @@ docker run --rm -i \
 
 And then you can configure the access.
 
+## 中文文档
+
+- [入门指南](docs/zh-CN/getting-started-zh.md)
+- [前端集成指南](docs/zh-CN/frontend-integration-zh.md)
+
 ## For Developers
 
 ### Quick Start Guides
