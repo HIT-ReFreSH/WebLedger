@@ -38,6 +38,11 @@
 		<PackageReference Include="Steeltoe.Extensions.Configuration.PlaceholderBase" Version="3.2.8" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.1" />
+		
+		<!-- ========== 新增：健康检查包 ========== -->
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.0" />
+		<!-- ====================================== -->
 	</ItemGroup>
 
 	<ItemGroup>
