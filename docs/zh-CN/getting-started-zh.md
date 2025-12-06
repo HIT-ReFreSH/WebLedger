@@ -124,6 +124,10 @@ curl http://localhost:5000/health
 - 检查连接字符串中的密码是否正确
 - 验证用户权限
 
+#### 端口已被占用
+- 检查 5000 和 5001 端口是否被其他程序占用
+- 修改 `appsettings.json` 中的 URL 设置
+
 #### .NET SDK 版本不匹配
 ```bash
 # 检查已安装的 .NET 版本
@@ -131,6 +135,9 @@ dotnet --list-sdks
 
 # 如果未安装 .NET 8，请从官网下载
 ```
+
+## 下一步
+
 - 阅读 [API 文档](../api/) 了解可用端点
 - 查看 [前端集成指南](frontend-integration-zh.md) 学习如何连接前端
 - 探索 [贡献指南](../CONTRIBUTING.md) 参与项目开发
@@ -143,3 +150,4 @@ dotnet --list-sdks
 - 联系维护团队
 
 ---
+
