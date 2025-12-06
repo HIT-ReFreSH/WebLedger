@@ -90,6 +90,8 @@ And then you can configure the access.
 
 - **[Getting Started Guide](./docs/getting-started.md)** - Quick setup and backend development
 - **[Frontend Integration Guide](./docs/frontend-integration.md)** - Build React/Vue apps with TypeScript
+- **[Getting Started Guide](docs\zh-CN\getting-started.md)** - Quick setup and backend development
+- **[Frontend Integration Guide](docs\zh-CN\frontend-integration.md)** - Build React/Vue apps with TypeScript
 
 ### Build Image
 
