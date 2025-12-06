@@ -1,66 +1,85 @@
-# Frontend Integration Guide
+# WebLedger 前端集成指南
 
-This guide will help you build a modern frontend application (React or Vue) with TypeScript to connect to the WebLedger backend.
+本文档介绍如何将前端应用程序与 WebLedger 后端 API 集成。
 
-## Table of Contents
+## API 基础
 
-- [Prerequisites](#prerequisites)
-- [Quick Start with React + TypeScript](#quick-start-with-react--typescript)
-- [Quick Start with Vue + TypeScript](#quick-start-with-vue--typescript)
-- [Authentication Setup](#authentication-setup)
-- [API Client Implementation](#api-client-implementation)
-- [Example Usage](#example-usage)
+### 基础 URL
+- **开发环境**: `http://localhost:5000`
+- **生产环境**: `https://your-domain.com`
 
-## Prerequisites
+所有 API 端点都以 `/api` 为前缀。
 
-- Node.js 18+ and npm/yarn/pnpm
-- WebLedger backend running (see [Getting Started](./getting-started.md))
-- Access credentials (access and secret)
+### 身份验证
 
-## Quick Start with React + TypeScript
+WebLedger 使用基于 JWT（JSON Web Tokens）的身份验证。
 
-### 1. Create React App with Vite
+#### 1. 登录获取令牌
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "username": "your-username",
+  "password": "your-password"
+}
+```
+
+成功响应：
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": 3600,
+  "user": {
+    "id": 1,
+    "username": "your-username"
+  }
+}
+```
+
+#### 2. 在请求中使用令牌
+
+```http
+GET /api/ledger/entries
+Authorization: Bearer <your-jwt-token>
+```
+
+## React 集成示例
+
+### 项目设置
 
 ```bash
-npm create vite@latest my-ledger-app -- --template react-ts
+# 创建新的 React 应用（TypeScript 模板）
+npx create-react-app my-ledger-app --template typescript
 cd my-ledger-app
-npm install
-```
 
-### 2. Install Dependencies
-
-```bash
+# 安装必要的依赖
 npm install axios
-# Optional: for state management
-npm install zustand
-# Optional: for routing
-npm install react-router-dom
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/icons-material
 ```
 
-### 3. Create API Client
+### 创建 API 服务
 
-Create `src/api/client.ts`:
-
+`src/services/api.ts`:
 ```typescript
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5143';
-const ACCESS_KEY = import.meta.env.VITE_WL_ACCESS || 'root';
-const SECRET_KEY = import.meta.env.VITE_WL_SECRET || '';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-export const apiClient: AxiosInstance = axios.create({
+const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'wl-access': ACCESS_KEY,
-    'wl-secret': SECRET_KEY,
-  },
+  timeout: 10000,
 });
 
-// Request interceptor for logging
-apiClient.interceptors.request.use(
+// 请求拦截器：添加认证令牌
+api.interceptors.request.use(
   (config) => {
-    console.log('Request:', config.method?.toUpperCase(), config.url);
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -68,542 +87,284 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error('API Error:', error.response?.data || error.message);
+// 响应拦截器：处理错误
     return Promise.reject(error);
   }
 );
-```
 
-### 4. Create Type Definitions
-
-Create `src/types/ledger.ts`:
-
-```typescript
-export interface Entry {
-  id?: string;
-  type: string;
-  category: string;
-  amount: number;
-  givenTime: string;
-  description?: string;
-}
-
-export interface Category {
-  name: string;
-  parent?: string;
-  description?: string;
-}
-
-export interface SelectOption {
-  startTime?: string;
-  endTime?: string;
-  categories?: string[];
-  types?: string[];
-  limit?: number;
-  offset?: number;
-}
-
-export interface LedgerType {
-  name: string;
-  defaultCategory: string;
-  description?: string;
-}
-```
-
-### 5. Create API Service
-
-Create `src/api/ledgerService.ts`:
-
-```typescript
-import { apiClient } from './client';
-import { Entry, Category, SelectOption, LedgerType } from '../types/ledger';
-
-export const ledgerService = {
-  // Entry operations
-  async createEntry(entry: Entry): Promise<string> {
-    const response = await apiClient.post<string>('/ledger/entry', entry);
-    return response.data;
-  },
-
-  async deleteEntry(id: string): Promise<void> {
-    await apiClient.delete(`/ledger/entry?id=${id}`);
-  },
-
-  async selectEntries(option: SelectOption): Promise<Entry[]> {
-    const response = await apiClient.post<Entry[]>('/ledger/select', option);
-    return response.data;
-  },
-
-  // Category operations
-  async addOrUpdateCategory(category: Category): Promise<void> {
-    await apiClient.put('/ledger/category', category);
-  },
-
-  async deleteCategory(categoryName: string): Promise<void> {
-    await apiClient.delete(`/ledger/category?category=${categoryName}`);
-  },
-
-  async listCategories(): Promise<Category[]> {
-    const response = await apiClient.get<Category[]>('/ledger/categories');
-    return response.data;
-  },
-
-  // Type operations
-  async addOrUpdateType(type: LedgerType): Promise<void> {
-    await apiClient.put('/ledger/type', type);
-  },
-
-  async listTypes(): Promise<LedgerType[]> {
-    const response = await apiClient.get<LedgerType[]>('/ledger/types');
-    return response.data;
+// API 方法
+export const authAPI = {
+  login: (username: string, password: string) =>
+    api.post('/api/auth/login', { username, password }),
   },
 };
+
+export const ledgerAPI = {
+  getEntries: (params?: { startDate?: string; endDate?: string; category?: string }) =>
+    api.get('/api/ledger/entries', { params }),
+  
+  createEntry: (entry: {
+    date: string;
+    description: string;
+    amount: number;
+    category: string;
+    notes?: string;
+  }) => api.post('/api/ledger/entries', entry),
+  
+  getCategories: () => api.get('/api/ledger/categories'),
+  
+  getSummary: (params?: { startDate?: string; endDate?: string }) =>
+    api.get('/api/ledger/summary', { params }),
+};
+
+export default api;
 ```
 
-### 6. Environment Variables
+### 登录组件示例
 
-Create `.env.local`:
-
-```env
-VITE_API_URL=http://localhost:5143
-VITE_WL_ACCESS=root
-VITE_WL_SECRET=your-secret-key-here
-```
-
-### 7. Example Component
-
-Create `src/components/EntryForm.tsx`:
-
+`src/components/Login.tsx`:
 ```typescript
 import React, { useState } from 'react';
-import { ledgerService } from '../api/ledgerService';
-import { Entry } from '../types/ledger';
+import { TextField, Button, Box, Alert } from '@mui/material';
+import { authAPI } from '../services/api';
 
-export const EntryForm: React.FC = () => {
-  const [formData, setFormData] = useState<Partial<Entry>>({
-    type: '',
-    category: '',
-    amount: 0,
-    givenTime: new Date().toISOString(),
-    description: '',
-  });
+const Login: React.FC<{ onLoginSuccess: () => void }> = ({ onLoginSuccess }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const id = await ledgerService.createEntry(formData as Entry);
-      console.log('Created entry:', id);
-      alert('Entry created successfully!');
-      // Reset form
-      setFormData({
-        type: '',
-        category: '',
-        amount: 0,
-        givenTime: new Date().toISOString(),
-        description: '',
-      });
-    } catch (error) {
-      console.error('Failed to create entry:', error);
-      alert('Failed to create entry');
+      const response = await authAPI.login(username, password);
+      localStorage.setItem('auth_token', response.data.token);
+      onLoginSuccess();
+    } catch (err) {
+      setError('登录失败，请检查用户名和密码');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Type:</label>
-        <input
-          type="text"
-          value={formData.type}
-          onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <label>Category:</label>
-        <input
-          type="text"
-          value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <label>Amount:</label>
-        <input
-          type="number"
-          value={formData.amount}
-          onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) })}
-          required
-        />
-      </div>
-      <div>
-        <label>Date:</label>
-        <input
-          type="datetime-local"
-          value={formData.givenTime?.slice(0, 16)}
-          onChange={(e) => setFormData({ ...formData, givenTime: new Date(e.target.value).toISOString() })}
-          required
-        />
-      </div>
-      <div>
-        <label>Description:</label>
-        <textarea
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-        />
-      </div>
-      <button type="submit">Create Entry</button>
-    </form>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      <TextField
+        fullWidth
+        label="用户名"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        margin="normal"
+        required
+      />
+      <TextField
+        fullWidth
+        label="密码"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        margin="normal"
+        required
+      />
+      <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+        登录
+      </Button>
+    </Box>
   );
 };
+
+export default Login;
 ```
 
-### 8. Run the Development Server
+### 账目列表组件
 
-```bash
-npm run dev
-```
-
-Your React app should now be running on `http://localhost:5173`.
-
-## Quick Start with Vue + TypeScript
-
-### 1. Create Vue App with Vite
-
-```bash
-npm create vite@latest my-ledger-app -- --template vue-ts
-cd my-ledger-app
-npm install
-```
-
-### 2. Install Dependencies
-
-```bash
-npm install axios
-# Optional: for state management
-npm install pinia
-# Optional: for routing
-npm install vue-router
-```
-
-### 3. Create API Client
-
-Create `src/api/client.ts`:
-
+`src/components/LedgerList.tsx`:
 ```typescript
-import axios, { AxiosInstance } from 'axios';
+import React, { useState, useEffect } from 'react';
+import {
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Typography
+} from '@mui/material';
+import { ledgerAPI } from '../services/api';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5143';
-const ACCESS_KEY = import.meta.env.VITE_WL_ACCESS || 'root';
-const SECRET_KEY = import.meta.env.VITE_WL_SECRET || '';
-
-export const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'wl-access': ACCESS_KEY,
-    'wl-secret': SECRET_KEY,
-  },
-});
-
-// Request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    console.log('Request:', config.method?.toUpperCase(), config.url);
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Response interceptor
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error('API Error:', error.response?.data || error.message);
-    return Promise.reject(error);
-  }
-);
-```
-
-### 4. Create Type Definitions
-
-Create `src/types/ledger.ts` (same as React version above).
-
-### 5. Create API Service
-
-Create `src/api/ledgerService.ts` (same as React version above).
-
-### 6. Environment Variables
-
-Create `.env.local`:
-
-```env
-VITE_API_URL=http://localhost:5143
-VITE_WL_ACCESS=root
-VITE_WL_SECRET=your-secret-key-here
-```
-
-### 7. Example Component
-
-Create `src/components/EntryForm.vue`:
-
-```vue
-<template>
-  <form @submit.prevent="handleSubmit">
-    <div>
-      <label>Type:</label>
-      <input v-model="formData.type" type="text" required />
-    </div>
-    <div>
-      <label>Category:</label>
-      <input v-model="formData.category" type="text" required />
-    </div>
-    <div>
-      <label>Amount:</label>
-      <input v-model.number="formData.amount" type="number" required />
-    </div>
-    <div>
-      <label>Date:</label>
-      <input v-model="formData.givenTime" type="datetime-local" required />
-    </div>
-    <div>
-      <label>Description:</label>
-      <textarea v-model="formData.description" />
-    </div>
-    <button type="submit">Create Entry</button>
-  </form>
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-import { ledgerService } from '../api/ledgerService';
-import type { Entry } from '../types/ledger';
-
-const formData = ref<Partial<Entry>>({
-  type: '',
-  category: '',
-  amount: 0,
-  givenTime: new Date().toISOString().slice(0, 16),
-  description: '',
-});
-
-const handleSubmit = async () => {
-  try {
-    const entry: Entry = {
-      ...formData.value,
-      givenTime: new Date(formData.value.givenTime!).toISOString(),
-    } as Entry;
-
-    const id = await ledgerService.createEntry(entry);
-    console.log('Created entry:', id);
-    alert('Entry created successfully!');
-
-    // Reset form
-    formData.value = {
-      type: '',
-      category: '',
-      amount: 0,
-      givenTime: new Date().toISOString().slice(0, 16),
-      description: '',
-    };
-  } catch (error) {
-    console.error('Failed to create entry:', error);
-    alert('Failed to create entry');
-  }
-};
-</script>
-```
-
-### 8. Run the Development Server
-
-```bash
-npm run dev
-```
-
-Your Vue app should now be running on `http://localhost:5173`.
-
-## Authentication Setup
-
-### Storing Credentials Securely
-
-**Development:**
-- Use `.env.local` for development (already shown above)
-- Never commit `.env.local` to version control
-
-**Production:**
-- Use environment variables from your hosting platform
-- For browser apps, consider implementing a login flow where credentials are stored in secure HTTP-only cookies
-- Alternatively, implement a backend-for-frontend (BFF) pattern to avoid exposing credentials in the browser
-
-### Dynamic Authentication
-
-If you want users to enter credentials:
-
-```typescript
-// src/api/client.ts
-export function setAuthCredentials(access: string, secret: string) {
-  apiClient.defaults.headers['wl-access'] = access;
-  apiClient.defaults.headers['wl-secret'] = secret;
+interface LedgerEntry {
+  id: number;
+  date: string;
+  description: string;
+  amount: number;
+  category: string;
+  balance: number;
 }
 
-// Usage in login component
-import { setAuthCredentials } from './api/client';
-
-function handleLogin(access: string, secret: string) {
-  setAuthCredentials(access, secret);
-  // Store in localStorage/sessionStorage if needed
-  localStorage.setItem('wl-access', access);
-  localStorage.setItem('wl-secret', secret);
-}
-```
-
-## Example Usage
-
-### Fetching and Displaying Entries
-
-**React:**
-```typescript
-import { useEffect, useState } from 'react';
-import { ledgerService } from '../api/ledgerService';
-import { Entry } from '../types/ledger';
-
-export const EntryList: React.FC = () => {
-  const [entries, setEntries] = useState<Entry[]>([]);
+const LedgerList: React.FC = () => {
+  const [entries, setEntries] = useState<LedgerEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadEntries();
+    fetchEntries();
   }, []);
 
-  const loadEntries = async () => {
+  const fetchEntries = async () => {
     try {
-      const data = await ledgerService.selectEntries({
-        limit: 100,
-        offset: 0,
-      });
-      setEntries(data);
+      const response = await ledgerAPI.getEntries();
+      setEntries(response.data);
     } catch (error) {
-      console.error('Failed to load entries:', error);
+      console.error('获取账目失败:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) return <Typography>加载中...</Typography>;
+
   return (
-    <div>
-      <h2>Recent Entries</h2>
-      {entries.map((entry) => (
-        <div key={entry.id}>
-          <strong>{entry.type}</strong> - {entry.category}: ${entry.amount}
-        </div>
-      ))}
-    </div>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>日期</TableCell>
+            <TableCell>描述</TableCell>
+            <TableCell>类别</TableCell>
+            <TableCell align="right">金额</TableCell>
+            <TableCell align="right">余额</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {entries.map((entry) => (
+            <TableRow key={entry.id}>
+              <TableCell>{new Date(entry.date).toLocaleDateString()}</TableCell>
+              <TableCell>{entry.description}</TableCell>
+              <TableCell>{entry.category}</TableCell>
+              <TableCell align="right" sx={{ color: entry.amount >= 0 ? 'green' : 'red' }}>
+                {entry.amount >= 0 ? '+' : ''}{entry.amount.toFixed(2)}
+              </TableCell>
+              <TableCell align="right">{entry.balance.toFixed(2)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+  
+  logout: () => {
+    </TableContainer>
   );
 };
+
+export default LedgerList;
 ```
 
-**Vue:**
-```vue
-<template>
-  <div>
-    <h2>Recent Entries</h2>
-    <div v-for="entry in entries" :key="entry.id">
-      <strong>{{ entry.type }}</strong> - {{ entry.category }}: ${{ entry.amount }}
-    </div>
-  </div>
-</template>
+## Vue.js 集成示例
 
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { ledgerService } from '../api/ledgerService';
-import type { Entry } from '../types/ledger';
+### Vue 3 + Composition API
 
-const entries = ref<Entry[]>([]);
+```javascript
+// src/composables/useLedgerApi.js
+import { ref } from 'vue';
+import axios from 'axios';
 
-const loadEntries = async () => {
-  try {
-    const data = await ledgerService.selectEntries({
-      limit: 100,
-      offset: 0,
-    });
-    entries.value = data;
-  } catch (error) {
-    console.error('Failed to load entries:', error);
-  }
-};
+const API_BASE_URL = 'http://localhost:5000';
 
-onMounted(loadEntries);
-</script>
+    localStorage.removeItem('auth_token');
+api.interceptors.response.use(
+      window.location.href = '/login';
+export function useLedgerApi() {
+  const api = axios.create({
+    baseURL: API_BASE_URL,
+  });
+
+  // 设置请求拦截器添加令牌
+  api.interceptors.request.use(config => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+    }
+  (response) => response,
+  (error) => {
+      config.headers.Authorization = `Bearer ${token}`;
+    if (error.response?.status === 401) {
+    }
+    return config;
+
+  });
+
+  const entries = ref([]);
+  const loading = ref(false);
+
+  const fetchEntries = async () => {
+    loading.value = true;
+    try {
+      const response = await api.get('/api/ledger/entries');
+      entries.value = response.data;
+    } catch (error) {
+      console.error('获取数据失败:', error);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    entries,
+    loading,
+    fetchEntries,
+  };
+}
 ```
 
-## CORS Configuration
+## 环境变量配置
 
-If you encounter CORS issues during development, you may need to configure the backend.
+在 React/Vue 项目根目录创建 `.env` 文件：
 
-Add to `web/Program.cs` (before `var app = builder.Build();`):
+```env
+REACT_APP_API_URL=http://localhost:5000
+REACT_APP_APP_NAME=WebLedger Frontend
+```
+
+## 安全最佳实践
+
+1. **令牌存储**: 使用 `localStorage` 或 `sessionStorage` 存储 JWT 令牌
+2. **HTTPS**: 生产环境始终使用 HTTPS
+3. **输入验证**: 前端和后端都要验证用户输入
+4. **错误处理**: 优雅地处理 API 错误
+5. **加载状态**: 显示加载指示器
+
+## 测试 API 连接
+
+使用以下命令测试 API 是否可用：
+
+```bash
+# 测试健康检查端点
+curl http://localhost:5000/health
+
+# 测试 API 端点（需要认证）
+curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:5000/api/ledger/entries
+```
+
+## 故障排除
+
+### CORS 问题
+如果遇到 CORS 错误，确保后端已正确配置 CORS：
 
 ```csharp
+// 在 .NET 后端 Program.cs 中
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+        policy => policy.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
 });
 ```
 
-And after `var app = builder.Build();`:
+### 连接超时
+- 检查后端服务是否正在运行
+- 验证端口号是否正确
+- 检查防火墙设置
 
-```csharp
-app.UseCors("AllowFrontend");
-```
 
-## Project Structure Recommendation
+## 更多资源
 
-```
-my-ledger-app/
-├── src/
-│   ├── api/
-│   │   ├── client.ts          # Axios instance configuration
-│   │   └── ledgerService.ts   # API methods
-│   ├── types/
-│   │   └── ledger.ts          # TypeScript type definitions
-│   ├── components/
-│   │   ├── EntryForm.tsx/vue  # Create entry form
-│   │   └── EntryList.tsx/vue  # Display entries
-│   ├── pages/                 # Route pages (optional)
-│   ├── stores/                # State management (optional)
-│   └── App.tsx/vue
-├── .env.local                 # Local environment variables
-└── package.json
-```
+- [React 官方文档](https://reactjs.org/docs/getting-started.html)
+- [Vue.js 官方文档](https://vuejs.org/guide/introduction.html)
+- [Axios 文档](https://axios-http.com/docs/intro)
+- [Material-UI 组件库](https://mui.com/material-ui/getting-started/)
 
-## Next Steps
+如需更多帮助，请查阅 [WebLedger GitHub 仓库](https://github.com/HIT-ReFreSH/WebLedger) 或提交 Issue。
 
-- Explore the Swagger UI at `http://localhost:5143/swagger` for all available endpoints
-- Implement error handling and loading states
-- Add state management (Redux/Zustand for React, Pinia for Vue)
-- Implement routing for multi-page applications
-- Add form validation
-- Create reusable components for categories, types, and views
+---
 
-## Troubleshooting
-
-**CORS Errors:**
-- Ensure the backend has CORS configured for your frontend origin
-- Check that the frontend URL matches the allowed origins
-
-**401 Unauthorized:**
-- Verify your `wl-access` and `wl-secret` headers are correct
-- Check that credentials are properly set in environment variables
-
-**Network Errors:**
-- Ensure the backend is running
-- Verify the `VITE_API_URL` points to the correct backend address
-
-For more backend setup details, see [Getting Started Guide](./getting-started.md).
