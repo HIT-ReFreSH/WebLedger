@@ -78,11 +78,50 @@ And then you can configure the access.
 
 🩺 Health Check Endpoints
 WebLedger provides comprehensive health check endpoints for monitoring and container orchestration.
+### Health Checks
+
+The application provides health check endpoints for monitoring system status, database connectivity, and external service availability.
+
+* **Basic Check**: `GET /health`
+  * Returns `Healthy` or `Unhealthy` string.
+  * Useful for load balancers or simple uptime monitoring.
+
+* **Detailed Check**: `GET /health/detailed`
+  * Returns JSON with detailed status of individual components (Database, External Services).
+  * Includes password masking for database connection strings in the output.
+  * Example response:
+    ```json
+    {
+      "status": "Healthy",
+      "totalDuration": "00:00:00.045",
+      "checks": [
+        {
+          "name": "database",
+          "status": "Healthy",
+          "description": "Database reachable",
+          "details": {
+             "connectionString.masked": "server=...;password=REDACTED",
+             "host": "localhost",
+             "port": "3306"
+          }
+        },
+        {
+          "name": "external_service",
+          "status": "Healthy",
+          "description": "No service URL configured"
+        }
+      ]
+    }
+    ```
+## For Developers
 
 Available Endpoints
 GET /health - Basic Health Check
 
 Returns overall application status
+- **[Getting Started Guide](./docs/getting-started.md)** - Quick setup and backend development
+- **[Frontend Integration Guide](./docs/frontend-integration.md)** - Build React/Vue apps with TypeScript
+- **[API Usage Examples](./docs/API_USAGE_EXAMPLES.md)** - Practical code examples for REST API and CLI
 
 Checks critical dependencies only
 

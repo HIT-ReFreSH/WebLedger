@@ -8,6 +8,12 @@ public class AccessMiddleware(IServiceProvider serviceProvider) : IMiddleware
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        // Allow health checks without authentication
+        if (context.Request.Path.StartsWithSegments("/health", StringComparison.OrdinalIgnoreCase))
+        {
+            await next(context);
+            return;
+        }
         if (!_access.Any())
         {
             await using var scope = serviceProvider.CreateAsyncScope();
