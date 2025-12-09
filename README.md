@@ -124,6 +124,7 @@ The application provides health check endpoints for monitoring system status, da
 
 - **[Getting Started Guide](./docs/getting-started.md)** - Quick setup and backend development
 - **[Frontend Integration Guide](./docs/frontend-integration.md)** - Build React/Vue apps with TypeScript
+- **[API Usage Examples](./docs/API_USAGE_EXAMPLES.md)** - Practical code examples for REST API and CLI
 
 ### Build Image
 
