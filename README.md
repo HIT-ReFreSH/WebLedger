@@ -43,11 +43,8 @@ docker run -tid \
   -e WL_SQL_HOST='<user>' \
   -e WL_SQL_PWD='<pwd>' \
   hitrefresh/web-ledger:0.3.1
-```
-
-### Start CLI (Direct)
-
-```bash
+Start CLI (Direct)
+bash
 docker pull hitrefresh/web-ledger-cli:0.3.1
 # if you are in China, login and use aliyun mirror: 
 # docker pull registry.cn-hangzhou.aliyuncs.com/hitrefresh/web-ledger-cli:0.3.1
@@ -61,13 +58,10 @@ docker run --rm -i\
   -e WL_SQL_HOST='<user>' \
   -e WL_SQL_PWD='<pwd>' \
   hitrefresh/web-ledger-cli:0.3.1
-```
-
 And then you can configure the access.
 
-### Start CLI (Remote)
-
-```bash
+Start CLI (Remote)
+bash
 docker pull hitrefresh/web-ledger-cli:0.3.1 
 # if you are in China, login and use aliyun mirror: 
 # docker pull registry.cn-hangzhou.aliyuncs.com/hitrefresh/web-ledger-cli:0.3.1
@@ -80,9 +74,10 @@ docker run --rm -i \
   -e WL_ACCESS='<access>' \
   -e WL_SECRET='<secret>' \
   hitrefresh/web-ledger-cli:0.3.1
-```
-
 And then you can configure the access.
+
+🩺 Health Check Endpoints
+WebLedger provides comprehensive health check endpoints for monitoring and container orchestration.
 ### Health Checks
 
 The application provides health check endpoints for monitoring system status, database connectivity, and external service availability.
@@ -120,38 +115,233 @@ The application provides health check endpoints for monitoring system status, da
     ```
 ## For Developers
 
-### Quick Start Guides
+Available Endpoints
+GET /health - Basic Health Check
 
+Returns overall application status
 - **[Getting Started Guide](./docs/getting-started.md)** - Quick setup and backend development
 - **[Frontend Integration Guide](./docs/frontend-integration.md)** - Build React/Vue apps with TypeScript
 - **[API Usage Examples](./docs/API_USAGE_EXAMPLES.md)** - Practical code examples for REST API and CLI
 
-### Build Image
+Checks critical dependencies only
 
-```bash
+Suitable for load balancers and monitoring
+
+GET /health/detailed - Detailed Health Report
+
+Returns comprehensive health information
+
+Includes all health checks with details
+
+Add ?pretty=true for formatted JSON output
+
+GET /health/live - Liveness Probe
+
+Checks if application is running
+
+Used by Kubernetes and Docker for liveness probes
+
+Does not check external dependencies
+
+Health Checks Performed
+MySQL Database Connection
+
+Verifies database connectivity
+
+Executes test query (SELECT 1)
+
+Reports connection details (server, database name)
+
+Memory Usage
+
+Monitors application memory consumption
+
+Provides warnings at 80% usage
+
+Reports critical status at 90% usage
+
+Application Self-Check
+
+Verifies application is responsive
+
+Includes version information
+
+Swagger UI Accessibility (Development only)
+
+Checks if API documentation is accessible
+
+Response Examples
+Basic Health Check (GET /health):
+
+json
+{
+  "status": "Healthy",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "duration": "45.2ms",
+  "environment": "Production",
+  "version": "0.3.1",
+  "checks": 3,
+  "healthy": 3,
+  "degraded": 0,
+  "unhealthy": 0
+}
+Detailed Health Check (GET /health/detailed):
+
+json
+{
+  "status": "Degraded",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "totalDuration": "102.5ms",
+  "environment": "Development",
+  "version": "0.3.1",
+  "checks": [
+    {
+      "name": "mysql-database",
+      "status": "Healthy",
+      "description": "Database connection is healthy",
+      "duration": "25.1ms",
+      "tags": ["database", "ready"],
+      "data": {
+        "provider": "MySQL",
+        "test_query_result": 1,
+        "connection_info": {
+          "server": "localhost",
+          "database": "webledger",
+          "user": "admin",
+          "port": "3306"
+        }
+      }
+    },
+    {
+      "name": "memory-usage",
+      "status": "Degraded",
+      "description": "Memory usage high: 85.5%",
+      "duration": "0.5ms",
+      "tags": ["system", "ready"],
+      "data": {
+        "allocated_mb": 850.3,
+        "total_available_mb": 1024.0,
+        "memory_usage_percent": 85.5,
+        "gen0_collections": 5,
+        "gen1_collections": 2,
+        "gen2_collections": 1
+      }
+    }
+  ],
+  "summary": {
+    "healthy": 1,
+    "degraded": 1,
+    "unhealthy": 0,
+    "total": 2
+  }
+}
+Docker Health Check Configuration
+yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  webledger:
+    image: hitrefresh/web-ledger:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - ConnectionStrings__mysql=${MYSQL_CONNECTION_STRING}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+Kubernetes Liveness and Readiness Probes
+yaml
+# kubernetes-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  template:
+    spec:
+      containers:
+      - name: webledger
+        image: hitrefresh/web-ledger:latest
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+Monitoring Integration
+These endpoints can be integrated with:
+
+Prometheus + Grafana - via HTTP endpoint scraping
+
+Azure Monitor - via Application Insights
+
+AWS CloudWatch - via custom metrics
+
+Datadog - via HTTP check integration
+
+New Relic - via synthetic monitoring
+
+Troubleshooting
+If health checks fail:
+
+Database Connection Issues:
+
+Verify ConnectionStrings:mysql configuration
+
+Check MySQL server is running
+
+Confirm network connectivity
+
+High Memory Usage:
+
+Review recent changes to the application
+
+Consider increasing container memory limits
+
+Check for memory leaks in long-running operations
+
+Endpoint Unreachable:
+
+Verify application is running on correct port
+
+Check firewall and network policies
+
+Review CORS configuration if accessing from different origin
+
+For Developers
+Quick Start Guides
+Getting Started Guide - Quick setup and backend development
+
+Frontend Integration Guide - Build React/Vue apps with TypeScript
+
+Build Image
+bash
 cd web
 dotnet publish --os linux /t:PublishContainer
 cd cli
 dotnet publish --os linux /t:PublishContainer
-```
-
-## Deployment/Initialize
-
+Deployment/Initialize
 Assuming you already have the binaries.
 
-### Prepare Database
-
-You need a MySQL server `$host` deployed, and an account `$user` with `$pwd` with access on schema `$dbname`.
+Prepare Database
+You need a MySQL server $host deployed, and an account $user with $pwd with access on schema $dbname.
 
 Variables here is just for easy description.
 
-### Configuration
+Configuration
+Server
+The server use appsettings.json at runtime and appsettings.development.json at develop time.
 
-#### Server
-
-The server use `appsettings.json` at runtime and `appsettings.development.json` at develop time.
-
-```json
+json
 {
   "Logging": {
     "LogLevel": {
@@ -164,84 +354,66 @@ The server use `appsettings.json` at runtime and `appsettings.development.json` 
   },
   "AllowedHosts": "*"
 }
-
-```
-
 Normally, the only thing you need to customize is the connection string.
 
-#### CLI Client
+CLI Client
+CLI use config.json as configuration file. There are two ways for the client to connect with WebLegder Server, through HTTP, or directly through mysql connection.
 
-CLI use `config.json` as configuration file. There are two ways for the client to connect with WebLegder Server, through HTTP, or directly through mysql connection. 
+For Mysql Connection, just make the connection string as the server's.:
 
-- For Mysql Connection, just make the connection string as the server's.:
-
-```json
+json
 {
   "target": "mysql",
   "host": "server=$host; port=3306; database=$dbname; user=$user; password=$pwd; Persist Security Info=False; Connect Timeout=300"
 }
+For Http Connection, access and secret are part of the authorization, which will be explained later:
 
-```
-
-- For Http Connection, `access` and `secret` are part of the authorization, which will be explained later:
-
-```json
+json
 {
   "target": "http",
   "host": "http://localhost:5143",
   "access": "root",
   "secret": "5jH!3NNF$HQs@KV2Q427HnN0RXgCeA$w"
 }
-```
+Authorization
+Generate initial access and secret
+Connect to the database using CLI.
 
-### Authorization
+Use ls command to view all available CLI commands.
 
-#### Generate initial `access` and `secret`
+Usels-acc command to view all accesses.
 
-1. Connect to the database using CLI.
-2. Use `ls` command to view all available CLI commands.
-3. Use`ls-acc` command to view all accesses.
-4. Use `grant <access-name>` to create new access, and store the secret; replace `<access-name>` with whatever you like.
+Use grant <access-name> to create new access, and store the secret; replace <access-name> with whatever you like.
 
-#### How to use?
+How to use?
+To use access and secret for CLI client, just edit the configuration as said previously
 
-- To use `access` and `secret` for CLI client, just edit the configuration as said previously
-- To use them for your own Http client, configure your http client as following; to develop them, you can take `cli/services/*Manager.cs` as reference:
+To use them for your own Http client, configure your http client as following; to develop them, you can take cli/services/*Manager.cs as reference:
 
-```csharp
+csharp
 http.BaseAddress = new(builder.Configuration["host"]);
 http.DefaultRequestHeaders.Add("wl-access", builder.Configuration["access"]);
 http.DefaultRequestHeaders.Add("wl-secret", builder.Configuration["secret"]);
-```
-
-## Concepts
-
-### Category
-
+Concepts
+Category
 The category of a ledger entry, such as "daily necessities", "daily chemicals", "food", "beverages", can have an optional parent category.
 
-### Type
-
+Type
 A specific type of ledger entry, such as "cola," "shampoo," or "bread," represents a specific type rather than a type or category of income/consumption, and is associated with a category when it first appears (default category thereafter).
 
-### Entry
-
+Entry
 A ledger entry, has its Category, Type, Amount, GivenTime, etc.
 
-### View
+View
+A summarized report for certain categories in a certain time range, it can only be created from View Templates.
 
-A summarized report for certain categories in a certain time range, it can only be created from **View Template**s.
+View Template
+Describe a class of reports (View) for certain categories, which store the categories information.
 
-### View Template
+View Automation
+Automation to create View from View Template every year/day/week/month/quarter(3 months).
 
-Describe a class of reports (**View**) for certain categories, which store the categories information.
+Usage
+Functions can be accessed through CLI or other clients, for development server, you can view /swagger to get OpenApi Support.
 
-### View Automation
-
-Automation to create **View** from **View Template** every year/day/week/month/quarter(3 months).
-
-## Usage
-
-Functions can be accessed through CLI or other clients, for development server, you can view `/swagger` to get OpenApi Support.
-
-**Notice: Use `ls` to view CLI commands.**
+Notice: Use ls to view CLI commands.
